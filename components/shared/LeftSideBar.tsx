@@ -10,20 +10,26 @@ type Link = {
 
 const LeftSideBar = () => {
   return (
-    <aside className="fixed left-0 h-full bg-light w-1/5 z-0 border-r-2 border-gray-300">
-      <h1 className="text-2xl font-bold text-neutral-800 m-10">PurelyBlog</h1>
-      <div className="flex flex-col mx-10 my-12 justify-between text-cyan-900 h-full">
-        {links.map((link: Link) => (
-          <Link href={link.link} key={link.label} className="text-xl font-bold">
-            <div className="flex flex-row gap-3 items-center">
-              <span className="text-4xl">{link.icon}</span>
-              {link.label}
-            </div>
-          </Link>
-        ))}
-        {/* <div className="mt-auto z-100">
-          <AvatarDropDown name="John Doe" email="" imgUrl="" />
-        </div> */}
+    <aside className="sticky left-0 top-0 h-screen text-cyan-900 bg-gray-300 bg-light border-r-2 border-gray-300">
+      <div className="flex flex-col h-full">
+        <h1 className="text-2xl font-bold text-neutral-800 m-10">PurelyBlog</h1>
+        <div className="flex flex-col gap-10 ml-10 mr-20">
+          {links.map((link: Link) => (
+            <Link
+              href={link.link}
+              key={link.label}
+              className="text-xl font-bold"
+            >
+              <div className="flex flex-row gap-3 items-center">
+                <span className="text-4xl">{link.icon}</span>
+                {link.label}
+              </div>
+            </Link>
+          ))}
+        </div>
+        <div className="mx-10 mt-auto mb-10">
+          <AvatarDropDown name="John Doe" email="johndoe@gmail.com" imgUrl="" />
+        </div>
       </div>
     </aside>
   );

@@ -21,9 +21,13 @@ export default function RootLayout({
     <html lang="en">
       {/* <AuthProvider> */}
       <body className={inter.className}>
-        <LeftSideBar />
-        <div className="w-3/5 flex justify-center items-center">{children}</div>
-        <RightSideBar />
+        <main className="flex flex-row">
+          <LeftSideBar />
+          <section className="flex justify-center w-full items-center">
+            <div className="mt-10">{children}</div>
+          </section>
+          <RightSideBar />
+        </main>
       </body>
       {/* </AuthProvider> */}
     </html>

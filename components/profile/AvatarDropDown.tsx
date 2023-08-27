@@ -12,14 +12,15 @@ export default function AvatarDropDown({ imgUrl, name, email }: Props) {
   return (
     <Dropdown
       inline
+      placement="top"
       label={
         <div className="flex flex-row gap-2 items-center">
           <Avatar
             alt="User settings"
-            img="/images/people/profile-picture-5.jpg"
+            // img="/images/people/profile-picture-5.jpg"
             rounded
           />
-          <span className="text-sm font-bold text-neutral-800">{name}</span>
+          <span className="text-base font-bold text-neutral-800">{name}</span>
         </div>
       }
     >
