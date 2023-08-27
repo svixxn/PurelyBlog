@@ -11,13 +11,17 @@
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  font-size: 20px;
+  background-color: #fff;
+  font-family: "Courier New", Courier, monospace;
+}
+
+.text-light {
+  color: #fff;
+}
+
+.bg-light {
+  background-color: #fff;
 }
 
 @layer base {

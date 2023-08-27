@@ -1,6 +1,6 @@
 const RightSideBar = () => {
   return (
-    <aside className="sticky right-0 w-1/5 h-screen border-r-2 border-gray-200">
+    <aside className="fixed right-0 h-screen w-1/5 bg-light border-l-2 z-0 border-gray-200">
       <div></div>
     </aside>
   );
