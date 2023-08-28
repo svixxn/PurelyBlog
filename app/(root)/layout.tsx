@@ -1,4 +1,4 @@
-import "./globals.css";
+import "../globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import LeftSideBar from "@/components/shared/LeftSideBar";
@@ -19,17 +19,17 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      {/* <AuthProvider> */}
-      <body className={inter.className}>
-        <main className="flex flex-row">
-          <LeftSideBar />
-          <section className="flex justify-center w-full items-center">
-            <div className="mt-10">{children}</div>
-          </section>
-          <RightSideBar />
-        </main>
-      </body>
-      {/* </AuthProvider> */}
+      <AuthProvider>
+        <body className={inter.className}>
+          <main className="flex flex-row">
+            <LeftSideBar />
+            <section className="flex justify-center w-full items-center">
+              <div className="mt-10">{children}</div>
+            </section>
+            <RightSideBar />
+          </main>
+        </body>
+      </AuthProvider>
     </html>
   );
 }

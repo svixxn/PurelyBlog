@@ -1,14 +1,19 @@
 "use client";
 
-import { Avatar, Dropdown } from "flowbite-react";
+import { Avatar, Button, Dropdown } from "flowbite-react";
+import { useSession, signOut } from "next-auth/react";
 
-type Props = {
-  imgUrl: string;
-  name: string;
-  email: string;
-};
+export default function AvatarDropDown() {
+  const { data: session } = useSession();
+  const user = session?.user;
 
-export default function AvatarDropDown({ imgUrl, name, email }: Props) {
+  if (!user)
+    return (
+      <Button variant="primary" href="/auth/signin">
+        Sign In
+      </Button>
+    );
+
   return (
     <Dropdown
       inline
@@ -20,17 +25,21 @@ export default function AvatarDropDown({ imgUrl, name, email }: Props) {
             // img="/images/people/profile-picture-5.jpg"
             rounded
           />
-          <span className="text-base font-bold text-neutral-800">{name}</span>
+          <span className="text-base font-bold text-neutral-800">
+            {user?.name}
+          </span>
         </div>
       }
     >
       <Dropdown.Header>
-        <span className="block text-sm">{name}</span>
-        <span className="block truncate text-sm font-medium">{email}</span>
+        <span className="block text-sm">{user?.name}</span>
+        <span className="block truncate text-sm font-medium">
+          {user?.email}
+        </span>
       </Dropdown.Header>
       <Dropdown.Item>Dashboard</Dropdown.Item>
       <Dropdown.Divider />
-      <Dropdown.Item>Sign Out</Dropdown.Item>
+      <Dropdown.Item onClick={signOut}>Sign Out</Dropdown.Item>
     </Dropdown>
   );
 }

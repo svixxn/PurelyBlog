@@ -13,22 +13,22 @@ const LeftSideBar = () => {
     <aside className="sticky left-0 top-0 h-screen text-cyan-900 bg-gray-300 bg-light border-r-2 border-gray-300">
       <div className="flex flex-col h-full">
         <h1 className="text-2xl font-bold text-neutral-800 m-10">PurelyBlog</h1>
-        <div className="flex flex-col gap-10 ml-10 mr-20">
+        <div className="flex flex-col gap-10 mx-10">
           {links.map((link: Link) => (
             <Link
               href={link.link}
               key={link.label}
               className="text-xl font-bold"
             >
-              <div className="flex flex-row gap-3 items-center">
-                <span className="text-4xl">{link.icon}</span>
+              <div className="flex flex-row gap-3 p-2 items-center border-b-[1px] border-gray-300">
+                <span className="text-3xl">{link.icon}</span>
                 {link.label}
               </div>
             </Link>
           ))}
         </div>
         <div className="mx-10 mt-auto mb-10">
-          <AvatarDropDown name="John Doe" email="johndoe@gmail.com" imgUrl="" />
+          <AvatarDropDown />
         </div>
       </div>
     </aside>

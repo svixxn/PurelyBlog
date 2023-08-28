@@ -27,13 +27,13 @@ const authOptions: NextAuthOptions = {
           const user = await User.findOne({ email });
 
           if (!user) {
-            return null;
+            throw new Error("Email or password is incorrect");
           }
 
           const passwordsMatch = await bcrypt.compare(password, user.password);
 
           if (!passwordsMatch) {
-            return null;
+            throw new Error("Email or password is incorrect");
           }
 
           return user;
@@ -43,9 +43,9 @@ const authOptions: NextAuthOptions = {
       },
     }),
   ],
-  //   pages: {
-  //     signIn: "/auth/signin",
-  //   },
+  pages: {
+    signIn: "/auth/signin",
+  },
 };
 
 const handler = NextAuth(authOptions);
