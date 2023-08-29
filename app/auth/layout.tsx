@@ -18,7 +18,7 @@ export default function RootLayout({
     <html lang="en">
       <AuthProvider>
         <body className={inter.className}>
-          <div className="w-full flex justify-center items-center min-h-screen">
+          <div className="w-full flex justify-center items-center min-h-screen bg-gradient-to-b from-cyan-500 to-blue-500">
             {children}
           </div>
         </body>

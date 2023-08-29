@@ -20,7 +20,7 @@ const LeftSideBar = () => {
               key={link.label}
               className="text-xl font-bold"
             >
-              <div className="flex flex-row gap-3 p-2 items-center border-b-[1px] border-gray-300">
+              <div className="flex flex-row gap-3 p-2 items-center border-b-[1px] border-gray-300 hover:bg-gray-200 hover:border-gray-100 rounded-lg transition">
                 <span className="text-3xl">{link.icon}</span>
                 {link.label}
               </div>

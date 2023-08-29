@@ -1,10 +1,6 @@
 import z from "zod";
 
-export const UserValidation = z.object({
-  name: z
-    .string()
-    .min(3, "Name should be al least 3 characters long!")
-    .optional(),
+export const UserLoginValidation = z.object({
   email: z
     .string()
     .email("You should provide a valid email")

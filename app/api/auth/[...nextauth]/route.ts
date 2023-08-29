@@ -46,6 +46,16 @@ const authOptions: NextAuthOptions = {
   pages: {
     signIn: "/auth/signin",
   },
+  callbacks: {
+    async session({ session, token, user }) {
+      session.user = user;
+      console.log("Session: ", session);
+      console.log("Token: ", token);
+      console.log("User: ", user);
+
+      return session;
+    },
+  },
 };
 
 const handler = NextAuth(authOptions);

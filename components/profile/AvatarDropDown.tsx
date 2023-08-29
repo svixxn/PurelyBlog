@@ -6,6 +6,7 @@ import { useSession, signOut } from "next-auth/react";
 export default function AvatarDropDown() {
   const { data: session } = useSession();
   const user = session?.user;
+  console.log(user);
 
   if (!user)
     return (
@@ -26,13 +27,13 @@ export default function AvatarDropDown() {
             rounded
           />
           <span className="text-base font-bold text-neutral-800">
-            {user?.name}
+            {user?.username}
           </span>
         </div>
       }
     >
       <Dropdown.Header>
-        <span className="block text-sm">{user?.name}</span>
+        <span className="block text-sm">{user?.username}</span>
         <span className="block truncate text-sm font-medium">
           {user?.email}
         </span>

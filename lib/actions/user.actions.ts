@@ -3,17 +3,17 @@
 import z from "zod";
 import User from "../models/user.model";
 import { connectToDB } from "../mongoose";
-import { UserValidation } from "../validations/user";
+import { UserSignupValidation } from "../validations/user.signup";
 
 export async function createUser({
-  name,
+  username,
   email,
   password,
-}: z.infer<typeof UserValidation>) {
+}: z.infer<typeof UserSignupValidation>) {
   try {
     connectToDB();
 
-    const user = await User.create({ name, email, password });
+    const user = await User.create({ username, email, password });
 
     return user;
   } catch (err: any) {
