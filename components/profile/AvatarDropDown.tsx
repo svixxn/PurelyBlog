@@ -2,18 +2,26 @@
 
 import { Avatar, Button, Dropdown } from "flowbite-react";
 import { useSession, signOut } from "next-auth/react";
+import { AiOutlineLoading } from "react-icons/ai";
 
 export default function AvatarDropDown() {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const user = session?.user;
-  console.log(user);
 
-  if (!user)
+  if (!user && status === "unauthenticated")
     return (
       <Button variant="primary" href="/auth/signin">
         Sign In
       </Button>
     );
+
+  if (status === "loading") {
+    return (
+      <div className="flex items-center justify-center">
+        <AiOutlineLoading className="h-6 w-6 animate-spin" />
+      </div>
+    );
+  }
 
   return (
     <Dropdown

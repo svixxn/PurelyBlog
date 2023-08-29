@@ -43,18 +43,38 @@ const authOptions: NextAuthOptions = {
       },
     }),
   ],
+  session: {
+    strategy: "jwt",
+  },
+  secret: process.env.NEXTAUTH_URL,
+  callbacks: {
+    async jwt({ token, user, session, trigger }) {
+      if (trigger === "update" && session?.name) {
+        token.name = session.name;
+      }
+
+      if (user) {
+        return {
+          ...token,
+          id: user.id,
+          username: user.username,
+        };
+      }
+      return token;
+    },
+    async session({ session, token, user }) {
+      return {
+        ...session,
+        user: {
+          ...session.user,
+          id: token.id,
+          username: token.username,
+        },
+      };
+    },
+  },
   pages: {
     signIn: "/auth/signin",
-  },
-  callbacks: {
-    async session({ session, token, user }) {
-      session.user = user;
-      console.log("Session: ", session);
-      console.log("Token: ", token);
-      console.log("User: ", user);
-
-      return session;
-    },
   },
 };
 
