@@ -87,14 +87,22 @@ const authOptions: NextAuthOptions = {
       try {
         await connectToDB();
 
-        const isUserExist = await User.findOne({ email: profile?.email });
+        const isUserByCredentialsExist = await User.findOne({
+          email: profile?.email,
+          password: { $ne: null || undefined },
+        });
 
-        if (!isUserExist) {
+        if (isUserByCredentialsExist) return false;
+
+        const isUserByProfileExist = await User.findOne({
+          email: profile?.email,
+        });
+
+        if (!isUserByProfileExist) {
           await User.create({
-            name: profile?.name,
+            name: profile?.login ? profile?.login.toLowerCase() : profile?.name,
             email: profile?.email,
             image: profile?.picture,
-            username: "svixxn",
           });
         }
 

@@ -25,8 +25,6 @@ export default function Login() {
     try {
       const { email, password } = values;
 
-      console.log(email, password);
-
       const res = await signIn("credentials", {
         email,
         password,
@@ -38,18 +36,18 @@ export default function Login() {
         return;
       }
 
-      router.push("/auth/onboarding");
+      router.push("/");
     } catch (err: any) {
       alert(err.message);
     }
   };
 
   const onGoogleSignIn = async () => {
-    await signIn("google", { callbackUrl: "/auth/onboarding" });
+    await signIn("google", { callbackUrl: "/" });
   };
 
   const onGitHubSignIn = async () => {
-    await signIn("github", { callbackUrl: "/auth/onboarding" });
+    await signIn("github", { callbackUrl: "/" });
   };
 
   return (

@@ -3,7 +3,7 @@ import Link from "next/link";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { updateUser } from "@/lib/actions/user.actions";
+import { createUser } from "@/lib/actions/user.actions";
 import { useRouter } from "next/navigation";
 import { UserSignupValidation } from "@/lib/validations/user.signup";
 import { Button, TextInput } from "flowbite-react";
@@ -24,7 +24,13 @@ export default function SignUp() {
   const onSubmit = async (values: z.infer<typeof UserSignupValidation>) => {
     try {
       const { email, name, password } = values;
-      const res = await updateUser({ name, email, password });
+      const res = await createUser({ name, email, password });
+
+      if (res?.error) {
+        alert(res.error);
+        return;
+      }
+
       router.push("/auth/signin");
     } catch (err: any) {
       alert(err.message);

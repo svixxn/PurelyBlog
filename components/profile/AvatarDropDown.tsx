@@ -31,7 +31,7 @@ export default function AvatarDropDown() {
         <div className="flex flex-row gap-2 items-center">
           <Avatar alt="User settings" img={user?.image as string} rounded />
           <span className="text-base font-bold text-neutral-800">
-            {user?.username || user?.name}
+            {user?.name?.split(" ")[0]}
           </span>
         </div>
       }

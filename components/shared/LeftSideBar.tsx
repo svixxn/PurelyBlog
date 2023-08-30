@@ -19,7 +19,7 @@ const LeftSideBar = () => {
     <aside className="sticky left-0 top-0 h-screen text-cyan-900 bg-gray-300 bg-light border-r-2 border-gray-300">
       <div className="flex flex-col h-full">
         <h1 className="text-2xl font-bold text-neutral-800 m-10">PurelyBlog</h1>
-        <div className="flex flex-col gap-10 mx-10">
+        <div className="flex flex-col gap-6 mx-10">
           {links.map((link: Link) => {
             const isActive =
               (pathname.includes(link.link) && link.link.length > 1) ||
@@ -28,7 +28,7 @@ const LeftSideBar = () => {
               <Link
                 href={link.link}
                 key={link.label}
-                className="text-xl font-bold"
+                className="text-lg font-bold"
               >
                 <div
                   className={`flex flex-row gap-3 p-2 items-center rounded-lg transition ${
@@ -37,7 +37,7 @@ const LeftSideBar = () => {
                       : "border-b-[1px] border-gray-300 hover:bg-gray-200 hover:border-gray-100"
                   }`}
                 >
-                  <span className="text-3xl">{link.icon}</span>
+                  <span className="text-2xl">{link.icon}</span>
                   {link.label}
                 </div>
               </Link>
