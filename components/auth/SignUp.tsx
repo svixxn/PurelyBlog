@@ -3,7 +3,7 @@ import Link from "next/link";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { createUser } from "@/lib/actions/user.actions";
+import { updateUser } from "@/lib/actions/user.actions";
 import { useRouter } from "next/navigation";
 import { UserSignupValidation } from "@/lib/validations/user.signup";
 import { Button, TextInput } from "flowbite-react";
@@ -23,8 +23,8 @@ export default function SignUp() {
 
   const onSubmit = async (values: z.infer<typeof UserSignupValidation>) => {
     try {
-      const { email, username, password } = values;
-      const res = await createUser({ ...values });
+      const { email, name, password } = values;
+      const res = await updateUser({ name, email, password });
       router.push("/auth/signin");
     } catch (err: any) {
       alert(err.message);
@@ -39,18 +39,18 @@ export default function SignUp() {
         className="flex flex-col w-full h-full mt-6"
       >
         <TextInput
-          color={errors.username && "failure"}
-          id="username"
-          placeholder="Username"
+          color={errors.name && "failure"}
+          id="Name"
+          placeholder="Name"
           shadow
           type="text"
-          className={`${!errors.username && "mb-4"}`}
-          {...register("username")}
+          className={`${!errors.name && "mb-4"}`}
+          {...register("name")}
         />
 
-        {errors.username && (
+        {errors.name && (
           <span className="text-sm italic text-red-500 mt-1 mb-4">
-            {errors.username.message}
+            {errors.name.message}
           </span>
         )}
 
@@ -110,20 +110,6 @@ export default function SignUp() {
           }
         >
           Sign Up
-        </Button>
-
-        <Button color="light" className="my-3">
-          Sign in with Google
-          <span className="flex items-center ml-1 ">
-            <FcGoogle size={20} />
-          </span>
-        </Button>
-
-        <Button color="light">
-          Sign in with GitHub
-          <span className="flex items-center ml-1 ">
-            <AiFillGithub size={20} />
-          </span>
         </Button>
 
         <div className="ml-auto">

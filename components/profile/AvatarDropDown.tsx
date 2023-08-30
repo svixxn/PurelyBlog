@@ -29,19 +29,15 @@ export default function AvatarDropDown() {
       placement="top"
       label={
         <div className="flex flex-row gap-2 items-center">
-          <Avatar
-            alt="User settings"
-            // img="/images/people/profile-picture-5.jpg"
-            rounded
-          />
+          <Avatar alt="User settings" img={user?.image as string} rounded />
           <span className="text-base font-bold text-neutral-800">
-            {user?.username}
+            {user?.username || user?.name}
           </span>
         </div>
       }
     >
       <Dropdown.Header>
-        <span className="block text-sm">{user?.username}</span>
+        <span className="block text-sm">{user?.username || user?.name}</span>
         <span className="block truncate text-sm font-medium">
           {user?.email}
         </span>

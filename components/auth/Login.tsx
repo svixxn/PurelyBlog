@@ -25,6 +25,8 @@ export default function Login() {
     try {
       const { email, password } = values;
 
+      console.log(email, password);
+
       const res = await signIn("credentials", {
         email,
         password,
@@ -36,10 +38,18 @@ export default function Login() {
         return;
       }
 
-      router.push("/");
+      router.push("/auth/onboarding");
     } catch (err: any) {
       alert(err.message);
     }
+  };
+
+  const onGoogleSignIn = async () => {
+    await signIn("google", { callbackUrl: "/auth/onboarding" });
+  };
+
+  const onGitHubSignIn = async () => {
+    await signIn("github", { callbackUrl: "/auth/onboarding" });
   };
 
   return (
@@ -91,14 +101,14 @@ export default function Login() {
           Login
         </Button>
 
-        <Button color="light" className="my-3">
+        <Button onClick={onGoogleSignIn} color="light" className="my-3">
           Sign in with Google
           <span className="flex items-center ml-1 ">
             <FcGoogle size={20} />
           </span>
         </Button>
 
-        <Button color="light">
+        <Button onClick={onGitHubSignIn} color="light">
           Sign in with GitHub
           <span className="flex items-center ml-1 ">
             <AiFillGithub size={20} />

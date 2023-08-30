@@ -3,19 +3,38 @@ import bcrypt from "bcryptjs";
 
 const userSchema = new mongoose.Schema(
   {
+    name: {
+      type: String,
+      trim: true,
+      required: true,
+    },
     username: {
       type: String,
-      required: true,
       trim: true,
+      lowercase: true,
     },
     email: {
       type: String,
-      required: true,
+      unique: true,
       trim: true,
+      required: true,
     },
     password: {
       type: String,
-      required: true,
+    },
+    role: {
+      type: String,
+      enum: ["user", "admin", "moderator"],
+      default: "user",
+    },
+    bio: {
+      type: String,
+      default: "",
+    },
+    image: {
+      type: String,
+      default:
+        "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg",
     },
   },
   { timestamps: true }
@@ -23,7 +42,7 @@ const userSchema = new mongoose.Schema(
 
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
-  this.password = await bcrypt.hash(this.password, 12);
+  if (this.password) this.password = await bcrypt.hash(this.password, 12);
   next();
 });
 

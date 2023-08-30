@@ -1,6 +1,8 @@
 import NextAuth from "next-auth/next";
 import type { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import GoogleProvider from "next-auth/providers/google";
+import GitHubProvider from "next-auth/providers/github";
 import { connectToDB } from "@/lib/mongoose";
 import bcrypt from "bcryptjs";
 import User from "@/lib/models/user.model";
@@ -9,6 +11,14 @@ type MyCredentials = { email: string; password: string };
 
 const authOptions: NextAuthOptions = {
   providers: [
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID as string,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+    }),
+    GitHubProvider({
+      clientId: process.env.GITHUB_CLIENT_ID as string,
+      clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
+    }),
     CredentialsProvider({
       name: "credentials",
       credentials: {
@@ -49,10 +59,10 @@ const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
     async jwt({ token, user, session, trigger }) {
+      //TODO:update username
       if (trigger === "update" && session?.name) {
         token.name = session.name;
       }
-
       if (user) {
         return {
           ...token,
@@ -71,6 +81,28 @@ const authOptions: NextAuthOptions = {
           username: token.username,
         },
       };
+    },
+    async signIn({ profile, account }) {
+      if (account?.provider === "credentials") return true;
+      try {
+        await connectToDB();
+
+        const isUserExist = await User.findOne({ email: profile?.email });
+
+        if (!isUserExist) {
+          await User.create({
+            name: profile?.name,
+            email: profile?.email,
+            image: profile?.picture,
+            username: "svixxn",
+          });
+        }
+
+        return true;
+      } catch (err: any) {
+        console.log(err);
+        return false;
+      }
     },
   },
   pages: {
