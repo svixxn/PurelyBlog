@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { createUser } from "@/lib/actions/user.actions";
@@ -8,8 +8,6 @@ import { useRouter } from "next/navigation";
 import { UserSignupValidation } from "@/lib/validations/user.signup";
 import { Button, TextInput } from "flowbite-react";
 import { AiOutlineLoading } from "react-icons/ai";
-import { FcGoogle } from "react-icons/fc";
-import { AiFillGithub } from "react-icons/ai";
 
 export default function SignUp() {
   const router = useRouter();
@@ -23,8 +21,8 @@ export default function SignUp() {
 
   const onSubmit = async (values: z.infer<typeof UserSignupValidation>) => {
     try {
-      const { email, name, password } = values;
-      const res = await createUser({ name, email, password });
+      const { email, name, username, password } = values;
+      const res = await createUser({ name, username, email, password });
 
       if (res?.error) {
         alert(res.error);
@@ -57,6 +55,22 @@ export default function SignUp() {
         {errors.name && (
           <span className="text-sm italic text-red-500 mt-1 mb-4">
             {errors.name.message}
+          </span>
+        )}
+
+        <TextInput
+          color={errors.username && "failure"}
+          id="username"
+          placeholder="Username"
+          shadow
+          type="text"
+          className={`${!errors.username && "mb-4"}`}
+          {...register("username")}
+        />
+
+        {errors.username && (
+          <span className="text-sm italic text-red-500 mt-1 mb-4">
+            {errors.username.message}
           </span>
         )}
 

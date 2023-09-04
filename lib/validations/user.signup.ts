@@ -6,14 +6,14 @@ export const UserSignupValidation = z
     email: z
       .string()
       .email("You should provide a valid email")
-      .min(3, "Email should be al least 3 characters long!"),
+      .min(4, "Email should be al least 3 characters long!"),
     password: z
       .string()
       .min(6, "Password should be al least 6 characters long!"),
-    confirm: z
+    username: z
       .string()
-      .min(6, "Password should be al least 6 characters long!")
-      .optional(),
+      .min(3, "Username should be al least 3 characters long!"),
+    confirm: z.string(),
   })
   .refine((data) => data.password === data.confirm, {
     message: "Passwords don't match",

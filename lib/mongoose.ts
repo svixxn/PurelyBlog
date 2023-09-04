@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 let isConnected = false;
 export const connectToDB = async () => {
-  if (isConnected) return console.log("Already connected to MongoDB");
+  if (isConnected) return;
   if (!process.env.MONGODB_URL) return console.log("MONGODB_URL not found");
 
   try {

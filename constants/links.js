@@ -1,5 +1,6 @@
-import { AiFillHome, AiOutlineSearch } from "react-icons/ai";
+import { AiFillHome, AiOutlineUser } from "react-icons/ai";
 import { IoIosNotificationsOutline, IoIosCreate } from "react-icons/io";
+import { BiSolidGroup } from "react-icons/bi";
 const links = [
   {
     label: "Home",
@@ -7,9 +8,14 @@ const links = [
     icon: <AiFillHome />,
   },
   {
-    label: "Search",
-    link: "/search",
-    icon: <AiOutlineSearch />,
+    label: "Users",
+    link: "/users",
+    icon: <AiOutlineUser />,
+  },
+  {
+    label: "Communities",
+    link: "/communities",
+    icon: <BiSolidGroup />,
   },
   {
     label: "Create",

@@ -2,7 +2,7 @@
 
 import links from "../../constants/links";
 import Link from "next/link";
-import AvatarDropDown from "../profile/AvatarDropDown";
+import AvatarDropDown from "../user/AvatarDropDown";
 import { usePathname, useRouter } from "next/navigation";
 
 type Link = {
@@ -16,10 +16,10 @@ const LeftSideBar = () => {
   const pathname = usePathname();
 
   return (
-    <aside className="sticky left-0 top-0 h-screen text-cyan-900 bg-gray-300 bg-light border-r-2 border-gray-300">
+    <aside className="sticky left-0 top-0 h-screen text-cyan-900 bg-gray-300 bg-light border-r-2 w-96 border-gray-300">
       <div className="flex flex-col h-full">
         <h1 className="text-2xl font-bold text-neutral-800 m-10">PurelyBlog</h1>
-        <div className="flex flex-col gap-6 mx-10">
+        <div className="flex flex-col gap-6 px-10">
           {links.map((link: Link) => {
             const isActive =
               (pathname.includes(link.link) && link.link.length > 1) ||

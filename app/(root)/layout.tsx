@@ -21,10 +21,10 @@ export default function RootLayout({
     <html lang="en">
       <AuthProvider>
         <body className={inter.className}>
-          <main className="flex flex-row">
+          <main className="flex flex-row min-h-screen">
             <LeftSideBar />
-            <section className="flex justify-center w-full items-center">
-              <div className="mt-10">{children}</div>
+            <section className="flex w-full">
+              <div className="m-20 w-full">{children}</div>
             </section>
             <RightSideBar />
           </main>

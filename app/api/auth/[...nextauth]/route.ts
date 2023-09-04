@@ -63,26 +63,30 @@ const authOptions: NextAuthOptions = {
       if (trigger === "update" && session?.name) {
         token.name = session.name;
       }
-      if (user) {
-        return {
-          ...token,
-          id: user.id,
-          username: user.username,
-        };
-      }
       return token;
     },
     async session({ session, token, user }) {
-      return {
-        ...session,
-        user: {
-          ...session.user,
-          id: token.id,
-          username: token.username,
-        },
-      };
+      try {
+        connectToDB();
+
+        const user = await User.findOne({ email: token.email });
+
+        const { id, username } = user;
+        return {
+          ...session,
+          user: {
+            ...session.user,
+            id,
+            username,
+          },
+        };
+      } catch (err) {
+        console.log(err);
+      }
+
+      return session;
     },
-    async signIn({ profile, account }) {
+    async signIn({ profile, account, user }) {
       if (account?.provider === "credentials") return true;
       try {
         await connectToDB();
@@ -100,9 +104,10 @@ const authOptions: NextAuthOptions = {
 
         if (!isUserByProfileExist) {
           await User.create({
-            name: profile?.login ? profile?.login.toLowerCase() : profile?.name,
+            name: profile?.name,
             email: profile?.email,
             image: profile?.picture,
+            username: profile?.email?.split("@")[0],
           });
         }
 

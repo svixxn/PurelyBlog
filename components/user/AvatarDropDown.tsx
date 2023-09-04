@@ -31,13 +31,13 @@ export default function AvatarDropDown() {
         <div className="flex flex-row gap-2 items-center">
           <Avatar alt="User settings" img={user?.image as string} rounded />
           <span className="text-base font-bold text-neutral-800">
-            {user?.name?.split(" ")[0]}
+            {user?.username}
           </span>
         </div>
       }
     >
       <Dropdown.Header>
-        <span className="block text-sm">{user?.username || user?.name}</span>
+        <span className="block text-sm">{user?.name}</span>
         <span className="block truncate text-sm font-medium">
           {user?.email}
         </span>
