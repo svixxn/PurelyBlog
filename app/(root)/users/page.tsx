@@ -5,33 +5,43 @@ import { getServerSession } from "next-auth";
 
 //:TODO: Add search functionality
 
-const Page = async () => {
+const Page = async ({
+  params,
+  searchParams,
+}: {
+  params: { slug: string };
+  searchParams?: { [key: string]: string | string[] | undefined };
+}) => {
   const session = await getServerSession();
-  const result = await getUsers({ currentUser: session?.user?.email });
+  const currentUser = session?.user?.email || "";
+  const result = await getUsers({
+    currentUser,
+    searchString: searchParams?.q as string,
+  });
 
   if (result?.error) {
-    alert(result.error);
+    console.log(result.error);
     return;
-  }
-
-  if (result?.users?.length === 0) {
-    return <div className="font-bold text-2xl">Users not found.</div>;
   }
 
   return (
     <div>
       <SearchBar searchType="users" />
       <ul className="my-4 divide-y divide-gray-200 dark:divide-gray-700">
-        {result?.users?.map((user) => (
-          <li key={user._id} className="py-3 sm:py-4">
-            <UserCard
-              name={user.name}
-              username={user.username}
-              email={user.email}
-              image={user.image}
-            />
-          </li>
-        ))}
+        {result?.results && result?.results > 0 ? (
+          result?.users?.map((user) => (
+            <li key={user._id} className="py-2 sm:py-4">
+              <UserCard
+                name={user.name}
+                username={user.username}
+                email={user.email}
+                image={user.image}
+              />
+            </li>
+          ))
+        ) : (
+          <p className="text-2xl font-bold">No users found.</p>
+        )}
       </ul>
     </div>
   );

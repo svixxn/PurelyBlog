@@ -23,7 +23,7 @@ const UserCard = ({ username, name, email, image }: UserCardProps) => {
         </div>
         <div className="min-w-0 flex-1">
           <p className="truncate text-sm font-medium text-gray-900 dark:text-white">
-            {name}
+            {name} ({username})
           </p>
           <p className="truncate text-sm text-gray-500 dark:text-gray-400">
             {email}

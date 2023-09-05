@@ -71,13 +71,14 @@ const authOptions: NextAuthOptions = {
 
         const user = await User.findOne({ email: token.email });
 
-        const { id, username } = user;
+        const { id, username, image } = user;
         return {
           ...session,
           user: {
             ...session.user,
             id,
             username,
+            image,
           },
         };
       } catch (err) {
@@ -106,7 +107,7 @@ const authOptions: NextAuthOptions = {
           await User.create({
             name: profile?.name,
             email: profile?.email,
-            image: profile?.picture,
+            image: profile?.picture || profile?.avatar_url,
             username: profile?.email?.split("@")[0],
           });
         }

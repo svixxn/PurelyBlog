@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import { UserSignupValidation } from "@/lib/validations/user.signup";
 import { Button, TextInput } from "flowbite-react";
 import { AiOutlineLoading } from "react-icons/ai";
+import { toast } from "react-hot-toast";
 
 export default function SignUp() {
   const router = useRouter();
@@ -25,18 +26,18 @@ export default function SignUp() {
       const res = await createUser({ name, username, email, password });
 
       if (res?.error) {
-        alert(res.error);
+        toast.error(res.error);
         return;
       }
-
+      toast.success("Signed up successfully");
       router.push("/auth/signin");
     } catch (err: any) {
-      alert(err.message);
+      toast.error(err.message);
     }
   };
 
   return (
-    <div className="flex items-center justify-center flex-col w-full md:w-1/2 xl:w-1/4 h-full bg-white rounded p-12">
+    <div className="flex items-center justify-center flex-col w-full md:w-1/2 xl:w-1/4 h-full bg-white rounded p-12 border-2 border-gray-200">
       <h1 className="font-bold text-2xl">Sign Up</h1>
       <form
         onSubmit={handleSubmit(onSubmit)}

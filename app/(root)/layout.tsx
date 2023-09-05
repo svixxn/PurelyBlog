@@ -4,6 +4,7 @@ import { Inter } from "next/font/google";
 import LeftSideBar from "@/components/shared/LeftSideBar";
 import RightSideBar from "@/components/shared/RightSideBar";
 import AuthProvider from "@/context/AuthProvider";
+import { Toaster } from "react-hot-toast";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,6 +25,7 @@ export default function RootLayout({
           <main className="flex flex-row min-h-screen">
             <LeftSideBar />
             <section className="flex w-full">
+              <Toaster position="bottom-left" reverseOrder={false} />
               <div className="m-20 w-full">{children}</div>
             </section>
             <RightSideBar />

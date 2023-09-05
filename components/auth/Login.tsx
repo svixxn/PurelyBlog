@@ -10,6 +10,7 @@ import { Button, TextInput } from "flowbite-react";
 import { AiOutlineLoading } from "react-icons/ai";
 import { FcGoogle } from "react-icons/fc";
 import { AiFillGithub } from "react-icons/ai";
+import { toast } from "react-hot-toast";
 
 export default function Login() {
   const router = useRouter();
@@ -32,13 +33,12 @@ export default function Login() {
       });
 
       if (res?.error) {
-        alert("Invalid credentials");
+        toast.error("Invalid credentials");
         return;
       }
-
       router.push("/");
     } catch (err: any) {
-      alert(err.message);
+      toast.error(err.message);
     }
   };
 
@@ -51,7 +51,7 @@ export default function Login() {
   };
 
   return (
-    <div className="flex items-center justify-center flex-col w-full md:w-1/2 xl:w-1/4 h-full bg-white rounded p-12">
+    <div className="flex items-center justify-center flex-col w-full md:w-1/2 xl:w-1/4 h-full bg-white rounded p-12 border-2 border-gray-200 shadow-2xl">
       <h1 className="font-bold text-2xl">Login</h1>
       <form
         onSubmit={handleSubmit(onSubmit)}

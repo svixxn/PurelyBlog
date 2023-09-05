@@ -2,7 +2,7 @@
 
 import { Avatar, Button, Dropdown } from "flowbite-react";
 import { useSession, signOut } from "next-auth/react";
-import { AiOutlineLoading } from "react-icons/ai";
+import Spinner from "../shared/Spinner";
 
 export default function AvatarDropDown() {
   const { data: session, status } = useSession();
@@ -16,11 +16,7 @@ export default function AvatarDropDown() {
     );
 
   if (status === "loading") {
-    return (
-      <div className="flex items-center justify-center">
-        <AiOutlineLoading className="h-6 w-6 animate-spin" />
-      </div>
-    );
+    return <Spinner />;
   }
 
   return (

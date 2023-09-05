@@ -1,6 +1,7 @@
 import { Inter } from "next/font/google";
 import "../globals.css";
 import AuthProvider from "@/context/AuthProvider";
+import { Toaster } from "react-hot-toast";
 
 export const metadata = {
   title: "Authorization",
@@ -18,7 +19,10 @@ export default function RootLayout({
     <html lang="en">
       <AuthProvider>
         <body className={inter.className}>
-          <div className="w-full flex justify-center items-center min-h-screen bg-gradient-to-b from-cyan-500 to-blue-500">
+          <div>
+            <Toaster />
+          </div>
+          <div className="w-full flex justify-center items-center min-h-screen">
             {children}
           </div>
         </body>
