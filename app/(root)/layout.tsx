@@ -26,7 +26,7 @@ export default function RootLayout({
             <LeftSideBar />
             <section className="flex w-full">
               <Toaster position="bottom-left" reverseOrder={false} />
-              <div className="m-20 w-full">{children}</div>
+              <div className="m-16 w-full">{children}</div>
             </section>
             <RightSideBar />
           </main>

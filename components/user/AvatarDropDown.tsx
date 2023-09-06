@@ -2,7 +2,8 @@
 
 import { Avatar, Button, Dropdown } from "flowbite-react";
 import { useSession, signOut } from "next-auth/react";
-import Spinner from "../shared/Spinner";
+import Spinner from "../ui/Spinner";
+import Link from "next/link";
 
 export default function AvatarDropDown() {
   const { data: session, status } = useSession();
@@ -38,7 +39,10 @@ export default function AvatarDropDown() {
           {user?.email}
         </span>
       </Dropdown.Header>
-      <Dropdown.Item>Dashboard</Dropdown.Item>
+
+      <Link href={`/users/${user?.username}`}>
+        <Dropdown.Item>Dashboard</Dropdown.Item>
+      </Link>
       <Dropdown.Divider />
       <Dropdown.Item onClick={signOut}>Sign Out</Dropdown.Item>
     </Dropdown>

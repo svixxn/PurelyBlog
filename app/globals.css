@@ -24,6 +24,14 @@ body {
   background-color: #fff;
 }
 
+.customButtonBg {
+  box-shadow: 0 0 0 100vmax inset rgb(0 0 0 / var(--o, 0%));
+}
+
+.customButtonBg:hover {
+  --o: 40%;
+}
+
 @layer base {
   .text-blue {
     @apply text-xl text-sky-600;
