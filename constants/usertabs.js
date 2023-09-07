@@ -7,8 +7,8 @@ const tabs = [
     icon: <TbMessage2 />,
   },
   {
-    name: "Liked Posts",
-    label: "liked",
+    name: "Saved Posts",
+    label: "saved",
     icon: <TbMessage2Heart />,
   },
 ];

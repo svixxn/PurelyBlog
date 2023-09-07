@@ -10,6 +10,7 @@ type Props = {
   textColor?: string;
   width?: number;
   height?: number;
+  icon?: JSX.Element | null;
 };
 
 const Button = ({
@@ -20,14 +21,15 @@ const Button = ({
   textColor = "text-white",
   width = 24,
   height = 10,
+  icon = null,
 }: Props) => {
   if (src === null)
     return (
       <button
         onClick={onClickHandler}
-        className={`${textColor} py-1 px-2 text-center rounded-lg customButtonBg ${bgColor} w-${width} h-${height} transition`}
+        className={`${textColor} flex flex-row items-center gap-2 py-1 px-2 text-center rounded-lg customButtonBg ${bgColor} w-${width} h-${height} transition`}
       >
-        {text}
+        {icon} {text}
       </button>
     );
   return (

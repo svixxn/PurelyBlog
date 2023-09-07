@@ -4,6 +4,8 @@ import { getUser } from "@/lib/actions/user.actions";
 import { getServerSession } from "next-auth";
 import Image from "next/image";
 import { toast } from "react-hot-toast";
+import { AiFillEdit } from "react-icons/ai";
+import { BsFillArchiveFill } from "react-icons/bs";
 
 const page = async ({ params }: { params: { username: string } }) => {
   const result = await getUser({ username: params.username });
@@ -37,11 +39,13 @@ const page = async ({ params }: { params: { username: string } }) => {
                   text="Edit profile"
                   bgColor="bg-gray-100"
                   textColor="text-black"
+                  icon={<AiFillEdit />}
                 />
                 <Button
                   text="Show archive"
                   bgColor="bg-gray-100"
                   textColor="text-black"
+                  icon={<BsFillArchiveFill />}
                 />
               </>
             ) : (
