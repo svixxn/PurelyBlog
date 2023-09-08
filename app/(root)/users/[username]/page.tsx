@@ -40,6 +40,7 @@ const page = async ({ params }: { params: { username: string } }) => {
                   bgColor="bg-gray-100"
                   textColor="text-black"
                   icon={<AiFillEdit />}
+                  src={`/users/${params.username}/edit`}
                 />
                 <Button
                   text="Show archive"
