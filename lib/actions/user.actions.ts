@@ -7,7 +7,7 @@ import { FilterQuery, SortOrder } from "mongoose";
 type Params = {
   name: string;
   email: string;
-  password: string;
+  password?: string;
   username: string;
   bio?: string;
   image?: string;
@@ -50,7 +50,28 @@ export async function createUser({ name, username, email, password }: Params) {
   }
 }
 
-export async function updateUser({ name, username, email, bio }: Params) {}
+export async function updateUser({
+  name,
+  username,
+  email,
+  bio,
+  image,
+}: Params) {
+  connectToDB();
+
+  const user = await User.findOneAndUpdate(
+    { email },
+    {
+      name,
+      username,
+      bio,
+      image,
+    }
+  );
+
+  if (!user) return { error: "User not found" };
+  return { success: true };
+}
 
 export async function deleteUser({ email }: Params) {}
 

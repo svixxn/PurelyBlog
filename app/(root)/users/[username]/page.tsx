@@ -4,7 +4,7 @@ import { getUser } from "@/lib/actions/user.actions";
 import { getServerSession } from "next-auth";
 import Image from "next/image";
 import { toast } from "react-hot-toast";
-import { AiFillEdit } from "react-icons/ai";
+import { BiEditAlt, BiArchive } from "react-icons/bi";
 import { BsFillArchiveFill } from "react-icons/bs";
 
 const page = async ({ params }: { params: { username: string } }) => {
@@ -39,14 +39,14 @@ const page = async ({ params }: { params: { username: string } }) => {
                   text="Edit profile"
                   bgColor="bg-gray-100"
                   textColor="text-black"
-                  icon={<AiFillEdit />}
+                  icon={<BiEditAlt />}
                   src={`/users/${params.username}/edit`}
                 />
                 <Button
                   text="Show archive"
                   bgColor="bg-gray-100"
                   textColor="text-black"
-                  icon={<BsFillArchiveFill />}
+                  icon={<BiArchive />}
                 />
               </>
             ) : (
@@ -68,7 +68,7 @@ const page = async ({ params }: { params: { username: string } }) => {
               <span className="font-bold">0</span> following
             </div>
           </div>
-          <div className="text-sm">{result.user.bio || "no bio yet"}</div>
+          <div className="text-sm">{result.user.bio}</div>
         </div>
       </div>
       <hr />

@@ -1,5 +1,10 @@
 export { default } from "next-auth/middleware";
 
 export const config = {
-  matcher: ["/dashboard", "/new-post", "/notifications"],
+  matcher: [
+    "/dashboard",
+    "/new-post",
+    "/notifications",
+    "/users/:username/edit",
+  ],
 };

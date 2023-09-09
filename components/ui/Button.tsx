@@ -36,9 +36,9 @@ const Button = ({
     <Link href={src}>
       <button
         onClick={onClickHandler}
-        className={`${textColor} p-2 text-center rounded-lg customButtonBg ${bgColor} w-${width} h-${height} transition`}
+        className={`${textColor} flex flex-row items-center gap-2 py-1 px-2 text-center rounded-lg customButtonBg ${bgColor} w-${width} h-${height} transition`}
       >
-        {text}
+        {icon} {text}
       </button>
     </Link>
   );

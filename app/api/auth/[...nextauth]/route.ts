@@ -59,9 +59,11 @@ const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
     async jwt({ token, user, session, trigger }) {
-      //TODO:update username
-      if (trigger === "update" && session?.name) {
+      if (trigger === "update") {
         token.name = session.name;
+        token.username = session.username;
+        token.image = session.image;
+        token.bio = session.bio;
       }
       return token;
     },
@@ -71,13 +73,14 @@ const authOptions: NextAuthOptions = {
 
         const user = await User.findOne({ email: token.email });
 
-        const { id, username, image } = user;
+        const { id, username, image, bio } = user;
         return {
           ...session,
           user: {
             ...session.user,
             id,
             username,
+            bio,
             image,
           },
         };
