@@ -3,12 +3,20 @@ import { getServerSession } from "next-auth";
 import User from "../models/user.model";
 import { connectToDB } from "../mongoose";
 import { FilterQuery, SortOrder } from "mongoose";
+import { revalidatePath } from "next/cache";
 
-type Params = {
+type createParams = {
   name: string;
   email: string;
   password?: string;
   username: string;
+  image?: string;
+};
+
+type UpdateParams = {
+  name?: string;
+  email?: string;
+  username?: string;
   bio?: string;
   image?: string;
 };
@@ -27,7 +35,12 @@ type GetAllUsersParams = {
   sortBy?: SortOrder;
 };
 
-export async function createUser({ name, username, email, password }: Params) {
+export async function createUser({
+  name,
+  username,
+  email,
+  password,
+}: createParams) {
   try {
     connectToDB();
 
@@ -50,30 +63,27 @@ export async function createUser({ name, username, email, password }: Params) {
   }
 }
 
-export async function updateUser({
-  name,
-  username,
-  email,
-  bio,
-  image,
-}: Params) {
+export async function updateUser(
+  userId: string,
+  { name, username, email, bio, image }: UpdateParams
+) {
   connectToDB();
 
-  const user = await User.findOneAndUpdate(
-    { email },
-    {
-      name,
-      username,
-      bio,
-      image,
-    }
-  );
+  const user = await User.findByIdAndUpdate(userId, {
+    name,
+    email,
+    username,
+    bio,
+    image,
+  });
 
   if (!user) return { error: "User not found" };
+
+  revalidatePath(`/users/${username}`);
   return { success: true };
 }
 
-export async function deleteUser({ email }: Params) {}
+export async function deleteUser({ email }: { email: string }) {}
 
 export async function getUser(Params: GetUserParams) {
   try {

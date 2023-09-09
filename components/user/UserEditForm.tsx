@@ -12,6 +12,8 @@ import { AiOutlineLoading } from "react-icons/ai";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
+import { useState } from "react";
+import FilterChangedFields from "@/lib/utils/filterChangedFields";
 
 type Props = {
   name: string;
@@ -24,6 +26,7 @@ type Props = {
 const UserEditForm = ({ name, username, email, image, bio }: Props) => {
   const router = useRouter();
   const { data: session, update: sessionUpdate } = useSession();
+  const [preview, setPreview] = useState<string | null>(null);
 
   const {
     register,
@@ -33,23 +36,48 @@ const UserEditForm = ({ name, username, email, image, bio }: Props) => {
     resolver: zodResolver(UserEditValidation),
   });
 
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files && files.length > 0) {
+      const file = files[0];
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const onSubmit = async (values: z.infer<typeof UserEditValidation>) => {
     try {
-      const { email, name, username, bio } = values;
-      const res = await updateUser({ name, username, email, bio });
+      const updatedFields = FilterChangedFields(values, {
+        email,
+        name,
+        username,
+        bio,
+      });
+
+      if (Object.keys(updatedFields).length === 0) {
+        toast("No changes were made");
+        router.push(`/users/${username}`);
+        return;
+      }
+
+      const res = await updateUser(session?.user?.id as string, updatedFields);
       if (res?.error) {
         toast.error(res.error);
         return;
       }
+
       sessionUpdate({
         name: name,
         username: username,
         email: email,
-        image: image,
         bio: bio,
       });
+
       toast.success("User updated successfully");
-      router.push(`/users/${username}`);
+      router.push(`/users/${updatedFields.username || username}`);
     } catch (err: any) {
       toast.error(err.message);
     }
@@ -59,14 +87,15 @@ const UserEditForm = ({ name, username, email, image, bio }: Props) => {
       <div className="flex flex-row justify-between items-center">
         <div className="flex flex-col gap-4 w-1/2 items-center">
           <Image
-            src={image}
+            src={preview || image}
             width={225}
             height={225}
             alt={username}
-            className="rounded-full object-cover"
+            className="rounded-full"
           />
           <FileInput
             id="image"
+            onChangeCapture={handleImageChange}
             // {...register("image")}
           />
         </div>
