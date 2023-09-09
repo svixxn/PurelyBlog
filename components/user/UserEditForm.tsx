@@ -67,8 +67,7 @@ const UserEditForm = ({ name, username, email, image, bio }: Props) => {
           />
           <FileInput
             id="image"
-            label="Profile picture"
-            {...register("image")}
+            // {...register("image")}
           />
         </div>
         <div className="flex flex-col w-full">
