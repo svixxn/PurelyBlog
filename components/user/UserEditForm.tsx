@@ -14,6 +14,7 @@ import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useState } from "react";
 import FilterChangedFields from "@/lib/utils/filterChangedFields";
+import { uploads } from "@/lib/utils/cloudinary";
 
 type Props = {
   name: string;
@@ -50,11 +51,17 @@ const UserEditForm = ({ name, username, email, image, bio }: Props) => {
 
   const onSubmit = async (values: z.infer<typeof UserEditValidation>) => {
     try {
+      if (values.image) {
+        const result = await uploads(values.image[0], "purelyblog/users");
+        console.log(result);
+      }
+
       const updatedFields = FilterChangedFields(values, {
         email,
         name,
         username,
         bio,
+        image,
       });
 
       if (Object.keys(updatedFields).length === 0) {
@@ -96,8 +103,14 @@ const UserEditForm = ({ name, username, email, image, bio }: Props) => {
           <FileInput
             id="image"
             onChangeCapture={handleImageChange}
-            // {...register("image")}
+            {...register("image")}
           />
+
+          {errors.image && (
+            <span className="text-sm italic text-red-500 mt-1 mb-4">
+              {errors.image.message as string}
+            </span>
+          )}
         </div>
         <div className="flex flex-col w-full">
           <TextInput

@@ -1,4 +1,11 @@
 import z from "zod";
+const MAX_FILE_SIZE = 5000000000;
+const ACCEPTED_IMAGE_TYPES = [
+  "image/jpeg",
+  "image/jpg",
+  "image/png",
+  "image/webp",
+];
 
 export const UserEditValidation = z.object({
   name: z
@@ -15,5 +22,5 @@ export const UserEditValidation = z.object({
     .min(3, "Username should be al least 3 characters long!")
     .max(20, "Username should be less than 20 characters long!"),
   bio: z.string().max(160, "Bio should be less than 160 characters long!"),
-  image: z.string().optional(),
+  image: z.any().optional(),
 });
