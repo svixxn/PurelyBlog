@@ -22,5 +22,14 @@ export const UserEditValidation = z.object({
     .min(3, "Username should be al least 3 characters long!")
     .max(20, "Username should be less than 20 characters long!"),
   bio: z.string().max(160, "Bio should be less than 160 characters long!"),
-  image: z.any().optional(),
+  image: z
+    .any()
+    .refine(
+      (files) => files?.[0]?.size <= MAX_FILE_SIZE,
+      `Max image size is 5MB.`
+    )
+    .refine(
+      (files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type),
+      "Only .jpg, .jpeg, .png and .webp formats are supported."
+    ),
 });

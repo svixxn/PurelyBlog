@@ -14,7 +14,7 @@ import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useState } from "react";
 import FilterChangedFields from "@/lib/utils/filterChangedFields";
-import { uploads } from "@/lib/utils/cloudinary";
+import uploads from "@/lib/utils/cloudinary";
 
 type Props = {
   name: string;
@@ -51,9 +51,13 @@ const UserEditForm = ({ name, username, email, image, bio }: Props) => {
 
   const onSubmit = async (values: z.infer<typeof UserEditValidation>) => {
     try {
-      if (values.image) {
-        const result = await uploads(values.image[0], "purelyblog/users");
-        console.log(result);
+      if (values.image && preview) {
+        const result = await uploads({
+          file: preview,
+          folder: "purelyblog/users",
+          public_id: session?.user?.id as string,
+        });
+        if (typeof result === "string") values.image = result;
       }
 
       const updatedFields = FilterChangedFields(values, {

@@ -1,5 +1,13 @@
+"use server";
 import cloudinary from "cloudinary";
-const fs = require("fs");
+
+type Params = {
+  file: string;
+  public_id: string;
+  folder: string;
+  width?: number;
+  height?: number;
+};
 
 cloudinary.v2.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -7,18 +15,33 @@ cloudinary.v2.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-const uploads = async (file: any, folder: string) => {
-  return await cloudinary.v2.uploader.upload(
-    file,
-    {
-      folder: folder,
-      resource_type: "auto",
-    },
-    (err: any, result: any) => {
-      public_id: result.public_id;
-      secure_url: result.secure_url;
-    }
-  );
+const uploads = async ({
+  file,
+  public_id,
+  folder,
+  width = 500,
+  height = 500,
+}: Params) => {
+  try {
+    const result = await cloudinary.v2.uploader.upload(
+      file,
+      {
+        public_id,
+        folder: folder,
+        resource_type: "image",
+        width,
+        height,
+      },
+      function (error, result) {
+        if (error) return error;
+        return result?.secure_url;
+      }
+    );
+    return result?.secure_url;
+  } catch (error) {
+    console.error("Error uploading to Cloudinary:", error);
+    throw error;
+  }
 };
 
-export { uploads, cloudinary };
+export default uploads;
