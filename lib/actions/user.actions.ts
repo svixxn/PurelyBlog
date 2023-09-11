@@ -4,7 +4,6 @@ import User from "../models/user.model";
 import { connectToDB } from "../mongoose";
 import { FilterQuery, SortOrder } from "mongoose";
 import { revalidatePath } from "next/cache";
-import { uploads } from "../utils/cloudinary";
 
 type createParams = {
   name: string;
