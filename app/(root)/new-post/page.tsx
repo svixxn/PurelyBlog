@@ -1,5 +1,7 @@
+import CreatePostForm from "@/components/posts/CreatePostForm";
+
 const page = () => {
-  return <div>Create post</div>;
+  return <CreatePostForm />;
 };
 
 export default page;

@@ -1,20 +1,20 @@
 "use client";
 
 import { updateUser } from "@/lib/actions/user.actions";
-import { UserEditValidation } from "@/lib/validations/user.edit";
+import { UserEditValidation } from "@/lib/validations/user/user.edit";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button, TextInput, Textarea, FileInput } from "flowbite-react";
+import { Button, TextInput, FileInput } from "flowbite-react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { z } from "zod";
 import { useRouter } from "next/navigation";
 import { AiOutlineLoading } from "react-icons/ai";
-import Link from "next/link";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useState } from "react";
 import FilterChangedFields from "@/lib/utils/filterChangedFields";
 import uploads from "@/lib/utils/cloudinary";
+import MyModal from "../ui/Modal";
 
 type Props = {
   name: string;
@@ -28,6 +28,7 @@ const UserEditForm = ({ name, username, email, image, bio }: Props) => {
   const router = useRouter();
   const { data: session, update: sessionUpdate } = useSession();
   const [preview, setPreview] = useState<string | null>(null);
+  const [isOpen, setIsOpen] = useState(false);
 
   const {
     register,
@@ -51,7 +52,10 @@ const UserEditForm = ({ name, username, email, image, bio }: Props) => {
 
   const onSubmit = async (values: z.infer<typeof UserEditValidation>) => {
     try {
-      if (values.image && preview) {
+      const oldValues = { name, username, email, bio, image };
+      values.image = image;
+
+      if (preview) {
         const result = await uploads({
           file: preview,
           folder: "purelyblog/users",
@@ -60,17 +64,10 @@ const UserEditForm = ({ name, username, email, image, bio }: Props) => {
         if (typeof result === "string") values.image = result;
       }
 
-      const updatedFields = FilterChangedFields(values, {
-        email,
-        name,
-        username,
-        bio,
-        image,
-      });
+      const updatedFields = FilterChangedFields(values, oldValues);
 
       if (Object.keys(updatedFields).length === 0) {
         toast("No changes were made");
-        router.push(`/users/${username}`);
         return;
       }
 
@@ -94,15 +91,18 @@ const UserEditForm = ({ name, username, email, image, bio }: Props) => {
     }
   };
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="mt-6">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="mt-6 flex flex-col gap-4"
+    >
       <div className="flex flex-row justify-between items-center">
         <div className="flex flex-col gap-4 w-1/2 items-center">
           <Image
-            src={preview || image}
             width={225}
             height={225}
+            src={preview || image}
             alt={username}
-            className="rounded-full"
+            className="rounded-full h-[225px] w-[225px] object-cover"
           />
           <FileInput
             id="image"
@@ -195,6 +195,12 @@ const UserEditForm = ({ name, username, email, image, bio }: Props) => {
           </Button>
         </div>
       </div>
+      <Button color="failure" onClick={() => setIsOpen(true)}>
+        Delete my account
+      </Button>
+      <MyModal title="test" openModal={isOpen} setOpenModal={setIsOpen}>
+        <h1>dfdfdf</h1>
+      </MyModal>
     </form>
   );
 };

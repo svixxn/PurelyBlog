@@ -1,5 +1,4 @@
 "use server";
-import { getServerSession } from "next-auth";
 import User from "../models/user.model";
 import { connectToDB } from "../mongoose";
 import { FilterQuery, SortOrder } from "mongoose";
@@ -50,7 +49,7 @@ export async function createUser({
 
     if (isExisted) return { error: "Email or username is already used." };
 
-    const user = await User.create({
+    await User.create({
       name,
       email,
       username,

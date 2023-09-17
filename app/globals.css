@@ -39,4 +39,7 @@ body {
   .text-darkgray {
     @apply text-xl text-gray-700;
   }
+  .text-primary {
+    @apply text-cyan-700;
+  }
 }

@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { createUser } from "@/lib/actions/user.actions";
 import { useRouter } from "next/navigation";
-import { UserSignupValidation } from "@/lib/validations/user.signup";
+import { UserSignupValidation } from "@/lib/validations/user/user.signup";
 import { Button, TextInput } from "flowbite-react";
 import { AiOutlineLoading } from "react-icons/ai";
 import { toast } from "react-hot-toast";

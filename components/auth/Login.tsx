@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { UserLoginValidation } from "@/lib/validations/user.login";
+import { UserLoginValidation } from "@/lib/validations/user/user.login";
 import { Button, TextInput } from "flowbite-react";
 import { AiOutlineLoading } from "react-icons/ai";
 import { FcGoogle } from "react-icons/fc";

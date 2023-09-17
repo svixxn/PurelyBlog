@@ -2,7 +2,6 @@ function FilterChangedFields(
   newData: Record<string, any>,
   oldData: Record<string, any>
 ): Record<string, any> {
-  console.log(newData, oldData);
   const changedFields: Record<string, any> = {};
 
   for (const key in newData) {
