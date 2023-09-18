@@ -15,7 +15,7 @@ export const PostUpsertValidation = z.object({
   text: z
     .string()
     .min(1, "Content text should be al least 3 characters long!")
-    .max(160, "Content text should be less than 160 characters long!"),
+    .max(2000, "Content text should be less than 160 characters long!"),
   image: z
     .any()
     .refine((files) => {

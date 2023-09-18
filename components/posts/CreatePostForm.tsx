@@ -1,7 +1,4 @@
 "use client";
-
-// import { updateUser } from "@/lib/actions/user.actions";
-// import { UserEditValidation } from "@/lib/validations/user.edit";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, TextInput, Textarea, FileInput } from "flowbite-react";
 import { useForm } from "react-hook-form";
@@ -14,9 +11,15 @@ import Image from "next/image";
 import { BiPhotoAlbum } from "react-icons/bi";
 import { useState } from "react";
 import { PostUpsertValidation } from "@/lib/validations/post/post";
+import { createPost } from "@/lib/actions/posts.actions";
+import handleImageChange from "@/lib/utils/handleImageChange";
+import uploads from "@/lib/utils/cloudinary";
 
 const CreatePostForm = () => {
   const [preview, setPreview] = useState<string | null>(null);
+  const { data: session } = useSession();
+  const userId = session?.user?.id as string;
+  const router = useRouter();
 
   const {
     register,
@@ -28,8 +31,23 @@ const CreatePostForm = () => {
 
   const onSubmit = async (values: z.infer<typeof PostUpsertValidation>) => {
     try {
-      console.log(values);
+      values.image = null;
+      if (preview) {
+        const result = await uploads({
+          file: preview,
+          folder: "purelyblog/posts",
+          public_id: userId,
+        });
+        if (typeof result === "string") values.image = result;
+      }
+      const res = await createPost({ ...values, author: userId });
+      if (res?.error) {
+        toast.error(res.error);
+        return;
+      }
+
       toast.success("Post created successfully");
+      router.push("/");
     } catch (err: any) {
       console.log(err);
       toast.error(err.message);
@@ -39,11 +57,19 @@ const CreatePostForm = () => {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="flex flex-col gap-4 w-full">
-        <div className="bg-gray-200 border-2 rounded-xl p-8 flex flex-row items-center justify-center h-48 gap-2">
+        <div
+          className={`bg-gray-200 border-2 rounded-xl p-2 ${
+            preview ? "h-80" : "h-48"
+          } flex flex-row items-center justify-center gap-2`}
+        >
           {preview ? (
-            <span className="text-primary">
-              <BiPhotoAlbum size={125} className="opacity-50" />
-            </span>
+            <Image
+              width={225}
+              height={225}
+              src={preview}
+              alt="Post image"
+              className="rounded object-cover"
+            />
           ) : (
             <span className="text-primary">
               <BiPhotoAlbum size={125} className="opacity-50" />
@@ -52,8 +78,16 @@ const CreatePostForm = () => {
 
           <div className="flex flex-col gap-1">
             <FileInput
-              helperText="Upload the image to describe your post"
+              helperText={`${
+                !preview ? "Upload the image to describe your post" : ""
+              }`}
               id="image"
+              onChangeCapture={(e) =>
+                handleImageChange(
+                  e as React.ChangeEvent<HTMLInputElement>,
+                  setPreview
+                )
+              }
               {...register("image")}
             />
           </div>

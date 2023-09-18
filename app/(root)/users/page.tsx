@@ -3,8 +3,6 @@ import UserCard from "@/components/user/UserCard";
 import { getUsers } from "@/lib/actions/user.actions";
 import { getServerSession } from "next-auth";
 
-//:TODO: Add search functionality
-
 const Page = async ({
   params,
   searchParams,

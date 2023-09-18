@@ -1,7 +1,7 @@
 import CreatePostForm from "@/components/posts/CreatePostForm";
 
-const page = () => {
+const Page = async () => {
   return <CreatePostForm />;
 };
 
-export default page;
+export default Page;
