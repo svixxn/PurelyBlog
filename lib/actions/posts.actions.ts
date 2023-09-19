@@ -34,11 +34,14 @@ export const createPost = async ({
 export const getPosts = async () => {
   try {
     await connectToDB();
-    const posts = await Post.find({})
+    const query = Post.find({})
       .sort({ createdAt: -1 })
-      .populate("author");
+      .populate({ path: "author", model: User });
+
+    const posts = await query.exec();
     return { posts };
   } catch (error: any) {
+    console.log(error);
     return { error: error.message };
   }
 };

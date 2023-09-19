@@ -3,6 +3,6 @@ declare type User = {
   email: string;
   password: string;
   username: string;
+  image: string;
   bio?: string;
-  image?: string;
 };

@@ -1,20 +1,25 @@
 import PostCard from "@/components/posts/PostCard";
 import { getPosts } from "@/lib/actions/posts.actions";
+import toast from "react-hot-toast";
 
 export default async function Home() {
-  const result = await getPosts();
+  const { posts, error } = await getPosts();
 
-  if (result?.error) {
-    console.log(result.error);
-    return;
+  if (error) {
+    // toast.error(error);
+    return <div>Oops! Something went wrong...</div>;
+  }
+
+  if (posts?.length === 0) {
+    return <div>No posts found</div>;
   }
 
   return (
-    <main>
+    <div>
       <div className="p-4">
         <h1 className="text-2xl font-bold mb-10">Latest posts</h1>
         <div className="flex flex-col gap-8">
-          {result?.posts?.map((post) => (
+          {posts?.map((post) => (
             <PostCard
               key={post._id}
               text={post.text}
@@ -28,6 +33,6 @@ export default async function Home() {
           ))}
         </div>
       </div>
-    </main>
+    </div>
   );
 }

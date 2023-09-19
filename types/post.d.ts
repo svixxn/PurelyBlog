@@ -3,6 +3,9 @@ declare type Post = {
   title: string;
   text: string;
   image: string;
+  children: Post[];
+  author: User;
+  parentId?: string;
   createdAt: string;
   updatedAt: string;
 };
