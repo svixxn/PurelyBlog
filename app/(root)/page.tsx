@@ -2,15 +2,11 @@ import PostCard from "@/components/posts/PostCard";
 import { getPosts } from "@/lib/actions/posts.actions";
 
 export default async function Home() {
-  const posts = await getPosts();
+  const result = await getPosts();
 
-  if (posts?.error) {
-    console.log(posts.error);
+  if (result?.error) {
+    console.log(result.error);
     return;
-  }
-
-  if (!posts?.posts) {
-    return <h1 className="font-bold">No posts yet.</h1>;
   }
 
   return (
@@ -18,7 +14,7 @@ export default async function Home() {
       <div className="p-4">
         <h1 className="text-2xl font-bold mb-10">Latest posts</h1>
         <div className="flex flex-col gap-8">
-          {posts.posts.map((post) => (
+          {result?.posts?.map((post) => (
             <PostCard
               key={post._id}
               text={post.text}

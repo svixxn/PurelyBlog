@@ -34,7 +34,9 @@ export const createPost = async ({
 export const getPosts = async () => {
   try {
     await connectToDB();
-    const posts = await Post.find({}).populate("author");
+    const posts = await Post.find({})
+      .sort({ createdAt: -1 })
+      .populate("author");
     return { posts };
   } catch (error: any) {
     return { error: error.message };
