@@ -9,6 +9,10 @@ import MyModal from "../ui/Modal";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
 import MyButton from "../ui/Button";
+import { TextInput } from "flowbite-react";
+import { deletePost } from "@/lib/actions/posts.actions";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 type PostCardProps = {
   id: string;
@@ -32,9 +36,22 @@ const PostCard = ({
   authorImage,
 }: PostCardProps) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [deletingText, setDeletingText] = useState("");
+  const router = useRouter();
   const { data: session } = useSession();
   const isCurrentAuthor = session?.user?.username === authorUsername;
   const newCreatedAt = dateParse(createdAt);
+
+  const handleDelete = () => {
+    try {
+      deletePost(id);
+      toast.success("Post deleted successfully");
+      router.push("/");
+    } catch (err: any) {
+      toast.error(err.message);
+    }
+  };
+
   return (
     <div className="flex flex-row gap-2 shadow-lg p-4">
       <div className="flex flex-col gap-2">
@@ -89,13 +106,35 @@ const PostCard = ({
           />
         </div>
       )}
-      {/* TODO: Add edit and delete functionality */}
-      <MyModal title="Post Actions" openModal={isOpen} setOpenModal={setIsOpen}>
-        <div className="flex flex-col gap-4 w-full">
-          <MyButton text="Edit" src={`posts/${id}/edit`} />
-          <MyButton text="Delete" bgColor="bg-red-500" textColor="text-white" />
-        </div>
-      </MyModal>
+      {isCurrentAuthor && (
+        <MyModal
+          title="Post Actions"
+          openModal={isOpen}
+          setOpenModal={setIsOpen}
+        >
+          <div className="flex flex-col gap-4 w-full">
+            <MyButton text="Edit" src={`posts/${id}/edit`} />
+            <p>
+              To delete the post, enter{" "}
+              <span className="font-bold">&apos;{title}&apos;</span>
+            </p>
+            <TextInput
+              id="title"
+              placeholder="Enter text here"
+              shadow
+              type="text"
+              onChange={(e) => setDeletingText(e.target.value)}
+            />
+            <MyButton
+              text="Delete"
+              bgColor="bg-red-500"
+              textColor="text-white"
+              onClickHandler={handleDelete}
+              isActive={deletingText === title}
+            />
+          </div>
+        </MyModal>
+      )}
     </div>
   );
 };

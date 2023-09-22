@@ -10,7 +10,7 @@ const ACCEPTED_IMAGE_TYPES = [
 export const PostUpsertValidation = z.object({
   title: z
     .string()
-    .min(1, "Title should be al least 3 characters long!")
+    .min(1, "Title should be al least 1 characters long!")
     .max(30, "Title should be less than 50 characters long!"),
   text: z
     .string()

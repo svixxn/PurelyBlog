@@ -5,32 +5,28 @@ import Post from "../models/post.model";
 import User from "../models/user.model";
 import { connectToDB } from "../mongoose";
 
-type createPostParams = {
+type PostParams = {
   title: string;
   text: string;
   author: string;
   image?: string;
   parentId?: string;
+  id?: string;
 };
 
 export const savePost = async ({
+  id,
   title,
   text,
   image,
   parentId,
   author,
-}: createPostParams) => {
+}: PostParams) => {
   try {
     await connectToDB();
-    //TODO: check if post exists and update it
-    let existingPost = await Post.findOne({ title });
-    if (existingPost) {
-      existingPost = { title, text, image };
-      console.log(existingPost);
-      await existingPost.save();
-    } else {
-      await Post.create({ title, text, image, parentId, author });
-    }
+    id
+      ? await Post.findByIdAndUpdate(id, { title, text, image })
+      : await Post.create({ title, text, image, parentId, author });
     revalidatePath("/");
     return { success: true };
   } catch (error: any) {
@@ -61,6 +57,18 @@ export const getPost = async (id: string) => {
       model: User,
     });
     return { post };
+  } catch (error: any) {
+    console.log(error);
+    return { error: error.message };
+  }
+};
+
+export const deletePost = async (id: string) => {
+  try {
+    await connectToDB();
+    await Post.findByIdAndDelete(id);
+    revalidatePath("/");
+    return { success: true };
   } catch (error: any) {
     console.log(error);
     return { error: error.message };

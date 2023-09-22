@@ -11,7 +11,14 @@ const Page = async ({ params }: { params: { id: string } }) => {
   }
   const { post } = result;
 
-  return <PostForm title={post.title} text={post.text} image={post.image} />;
+  return (
+    <PostForm
+      title={post.title}
+      text={post.text}
+      image={post.image}
+      id={post.id.toString()}
+    />
+  );
 };
 
 export default Page;

@@ -17,12 +17,13 @@ import handleImageChange from "@/lib/utils/handleImageChange";
 import uploads from "@/lib/utils/cloudinary";
 
 type Props = {
+  id?: string;
   image?: string;
   title?: string;
   text?: string;
 };
 
-const PostForm = ({ image, title, text }: Props) => {
+const PostForm = ({ id, image, title, text }: Props) => {
   const [preview, setPreview] = useState<string | null>(null);
   const { data: session } = useSession();
   const userId = session?.user?.id as string;
@@ -41,7 +42,7 @@ const PostForm = ({ image, title, text }: Props) => {
 
   const onSubmit = async (values: z.infer<typeof PostUpsertValidation>) => {
     try {
-      values.image = null;
+      values.image = image || null;
       if (preview) {
         const result = await uploads({
           file: preview,
@@ -50,7 +51,7 @@ const PostForm = ({ image, title, text }: Props) => {
         });
         if (typeof result === "string") values.image = result;
       }
-      const res = await savePost({ ...values, author: userId });
+      const res = await savePost({ ...values, author: userId, id });
       if (res?.error) {
         toast.error(res.error);
         return;

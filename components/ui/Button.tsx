@@ -8,9 +8,10 @@ type Props = {
   src?: string | null;
   bgColor?: string;
   textColor?: string;
-  width?: number;
-  height?: number;
+  width?: number | string;
+  height?: number | string;
   icon?: JSX.Element | null;
+  isActive?: boolean;
 };
 
 const MyButton = ({
@@ -19,15 +20,17 @@ const MyButton = ({
   src = null,
   bgColor = "bg-cyan-700",
   textColor = "text-white",
-  width = 24,
-  height = 10,
+  width = "full",
+  height = "full",
   icon = null,
+  isActive = true,
 }: Props) => {
   if (src === null)
     return (
       <button
         onClick={onClickHandler}
-        className={`${textColor} flex flex-row items-center gap-2 py-1 px-2 justify-center rounded-lg customButtonBg ${bgColor} w-${width} h-${height} transition`}
+        disabled={!isActive}
+        className={`${textColor} ${bgColor} cursor-pointer disabled:opacity-25 disabled:cursor-not-allowed flex flex-row items-center gap-2 py-1 px-2 justify-center rounded-lg customButtonBg w-${width} h-${height} transition`}
       >
         {icon} {text}
       </button>
