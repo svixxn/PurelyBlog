@@ -1,6 +1,7 @@
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, TextInput, Textarea, FileInput } from "flowbite-react";
+import MyButton from "@/components/ui/Button";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { z } from "zod";
@@ -11,19 +12,28 @@ import Image from "next/image";
 import { BiPhotoAlbum } from "react-icons/bi";
 import { useState } from "react";
 import { PostUpsertValidation } from "@/lib/validations/post/post";
-import { createPost } from "@/lib/actions/posts.actions";
+import { savePost } from "@/lib/actions/posts.actions";
 import handleImageChange from "@/lib/utils/handleImageChange";
 import uploads from "@/lib/utils/cloudinary";
 
-const CreatePostForm = () => {
+type Props = {
+  image?: string;
+  title?: string;
+  text?: string;
+};
+
+const PostForm = ({ image, title, text }: Props) => {
   const [preview, setPreview] = useState<string | null>(null);
   const { data: session } = useSession();
   const userId = session?.user?.id as string;
   const router = useRouter();
 
+  const anyImage = preview || image;
+
   const {
     register,
     handleSubmit,
+    resetField,
     formState: { errors, isSubmitting },
   } = useForm<z.infer<typeof PostUpsertValidation>>({
     resolver: zodResolver(PostUpsertValidation),
@@ -40,13 +50,13 @@ const CreatePostForm = () => {
         });
         if (typeof result === "string") values.image = result;
       }
-      const res = await createPost({ ...values, author: userId });
+      const res = await savePost({ ...values, author: userId });
       if (res?.error) {
         toast.error(res.error);
         return;
       }
 
-      toast.success("Post created successfully");
+      toast.success("Post saved successfully");
       router.push("/");
     } catch (err: any) {
       console.log(err);
@@ -54,19 +64,24 @@ const CreatePostForm = () => {
     }
   };
 
+  const resetFileInput = () => {
+    resetField("image");
+    setPreview(null);
+  };
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="flex flex-col gap-4 w-full">
         <div
           className={`bg-gray-200 border-2 rounded-xl p-2 ${
-            preview ? "h-80" : "h-48"
+            anyImage ? "h-80" : "h-48"
           } flex flex-row items-center justify-center gap-2`}
         >
-          {preview ? (
+          {anyImage ? (
             <Image
               width={225}
               height={225}
-              src={preview}
+              src={anyImage}
               alt="Post image"
               className="rounded object-cover"
             />
@@ -90,11 +105,14 @@ const CreatePostForm = () => {
               }
               {...register("image")}
             />
+            {preview && (
+              <MyButton text="Reset image" onClickHandler={resetFileInput} />
+            )}
           </div>
         </div>
         <div className="flex flex-col gap-1">
           <TextInput
-            //  defaultValue={title}
+            defaultValue={title}
             color={errors.title && "failure"}
             id="title"
             placeholder="Title"
@@ -111,7 +129,7 @@ const CreatePostForm = () => {
           )}
 
           <Textarea
-            //  defaultValue={text}
+            defaultValue={text}
             rows={10}
             color={errors.text && "failure"}
             id="text"
@@ -144,4 +162,4 @@ const CreatePostForm = () => {
   );
 };
 
-export default CreatePostForm;
+export default PostForm;

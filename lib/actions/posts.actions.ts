@@ -13,7 +13,7 @@ type createPostParams = {
   parentId?: string;
 };
 
-export const createPost = async ({
+export const savePost = async ({
   title,
   text,
   image,
@@ -22,8 +22,15 @@ export const createPost = async ({
 }: createPostParams) => {
   try {
     await connectToDB();
-    await Post.create({ title, text, image, parentId, author });
-
+    //TODO: check if post exists and update it
+    let existingPost = await Post.findOne({ title });
+    if (existingPost) {
+      existingPost = { title, text, image };
+      console.log(existingPost);
+      await existingPost.save();
+    } else {
+      await Post.create({ title, text, image, parentId, author });
+    }
     revalidatePath("/");
     return { success: true };
   } catch (error: any) {
@@ -40,6 +47,20 @@ export const getPosts = async () => {
 
     const posts = await query.exec();
     return { posts };
+  } catch (error: any) {
+    console.log(error);
+    return { error: error.message };
+  }
+};
+
+export const getPost = async (id: string) => {
+  try {
+    await connectToDB();
+    const post = await Post.findById(id).populate({
+      path: "author",
+      model: User,
+    });
+    return { post };
   } catch (error: any) {
     console.log(error);
     return { error: error.message };

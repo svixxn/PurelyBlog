@@ -1,10 +1,17 @@
+"use client";
 import dateParse from "@/lib/utils/dateParse";
 import Image from "next/image";
 import Link from "next/link";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import { FaRegCommentDots } from "react-icons/fa";
+import { HiOutlineDotsCircleHorizontal } from "react-icons/hi";
+import MyModal from "../ui/Modal";
+import { useSession } from "next-auth/react";
+import { useState } from "react";
+import MyButton from "../ui/Button";
 
 type PostCardProps = {
+  id: string;
   title: string;
   text: string;
   createdAt: string;
@@ -15,6 +22,7 @@ type PostCardProps = {
 };
 
 const PostCard = ({
+  id,
   title,
   text,
   createdAt,
@@ -23,6 +31,9 @@ const PostCard = ({
   authorName,
   authorImage,
 }: PostCardProps) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const { data: session } = useSession();
+  const isCurrentAuthor = session?.user?.username === authorUsername;
   const newCreatedAt = dateParse(createdAt);
   return (
     <div className="flex flex-row gap-2 shadow-lg p-4">
@@ -38,11 +49,18 @@ const PostCard = ({
             />
           </div>
           <div className="flex flex-col">
-            <p className="font-bold">
+            <div className="font-bold flex flex-row gap-1 items-center">
               <Link href={`/users/${authorUsername}`}>@{authorUsername}</Link>
               <span className="text-gray-400 text-sm"> - {newCreatedAt}</span>
               <span> - {title}</span>
-            </p>
+              {isCurrentAuthor && (
+                <HiOutlineDotsCircleHorizontal
+                  size={24}
+                  className="cursor-pointer"
+                  onClick={() => setIsOpen(true)}
+                />
+              )}
+            </div>
             <p className="text-gray-500">{authorName}</p>
           </div>
         </div>
@@ -64,13 +82,20 @@ const PostCard = ({
         <div className="ml-auto">
           <Image
             src={image}
-            width={500}
-            height={500}
+            width={250}
+            height={250}
             alt={title}
             className="rounded"
           />
         </div>
       )}
+      {/* TODO: Add edit and delete functionality */}
+      <MyModal title="Post Actions" openModal={isOpen} setOpenModal={setIsOpen}>
+        <div className="flex flex-col gap-4 w-full">
+          <MyButton text="Edit" src={`posts/${id}/edit`} />
+          <MyButton text="Delete" bgColor="bg-red-500" textColor="text-white" />
+        </div>
+      </MyModal>
     </div>
   );
 };

@@ -5,7 +5,6 @@ import { getServerSession } from "next-auth";
 import Image from "next/image";
 import { toast } from "react-hot-toast";
 import { BiEditAlt, BiArchive } from "react-icons/bi";
-import { BsFillArchiveFill } from "react-icons/bs";
 
 const page = async ({ params }: { params: { username: string } }) => {
   const result = await getUser({ username: params.username });

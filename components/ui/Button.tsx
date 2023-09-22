@@ -13,7 +13,7 @@ type Props = {
   icon?: JSX.Element | null;
 };
 
-const Button = ({
+const MyButton = ({
   onClickHandler,
   text,
   src = null,
@@ -27,7 +27,7 @@ const Button = ({
     return (
       <button
         onClick={onClickHandler}
-        className={`${textColor} flex flex-row items-center gap-2 py-1 px-2 text-center rounded-lg customButtonBg ${bgColor} w-${width} h-${height} transition`}
+        className={`${textColor} flex flex-row items-center gap-2 py-1 px-2 justify-center rounded-lg customButtonBg ${bgColor} w-${width} h-${height} transition`}
       >
         {icon} {text}
       </button>
@@ -36,7 +36,7 @@ const Button = ({
     <Link href={src}>
       <button
         onClick={onClickHandler}
-        className={`${textColor} flex flex-row items-center gap-2 py-1 px-2 text-center rounded-lg customButtonBg ${bgColor} w-${width} h-${height} transition`}
+        className={`${textColor} flex flex-row items-center gap-2 py-1 px-2 justify-center rounded-lg customButtonBg ${bgColor} w-${width} h-${height} transition`}
       >
         {icon} {text}
       </button>
@@ -44,4 +44,4 @@ const Button = ({
   );
 };
 
-export default Button;
+export default MyButton;

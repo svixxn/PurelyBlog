@@ -6,7 +6,6 @@ export default async function Home() {
   const { posts, error } = await getPosts();
 
   if (error) {
-    // toast.error(error);
     return <div>Oops! Something went wrong...</div>;
   }
 
@@ -22,6 +21,7 @@ export default async function Home() {
           {posts?.map((post) => (
             <PostCard
               key={post._id}
+              id={post._id.toString()}
               text={post.text}
               title={post.title}
               image={post.image}
