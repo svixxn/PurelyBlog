@@ -71,7 +71,7 @@ const page = async ({ params }: { params: { username: string } }) => {
         </div>
       </div>
       <hr />
-      <UserTabs />
+      <UserTabs userId={result?.user.id.toString()}/>
     </div>
   );
 };

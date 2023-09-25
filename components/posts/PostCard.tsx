@@ -87,11 +87,11 @@ const PostCard = ({
         <div className="mt-auto flex flex-row gap-8">
           <div className="flex flex-row gap-1 items-center">
             <AiOutlineHeart size={25} className="text-red-500" />
-            <span className="text-gray-400">5</span>
+            <span className="text-gray-400">0</span>
           </div>
           <div className="flex flex-row gap-1 items-center">
             <FaRegCommentDots size={25} />
-            <span className="text-gray-400">3</span>
+            <span className="text-gray-400">0</span>
           </div>
         </div>
       </div>

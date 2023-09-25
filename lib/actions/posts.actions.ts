@@ -74,3 +74,19 @@ export const deletePost = async (id: string) => {
     return { error: error.message };
   }
 };
+
+
+export const getPostsByAuthor = async(userId: string) => {
+  try {
+    await connectToDB();
+    const query = Post.find({author: userId})
+      .sort({ createdAt: -1 })
+      .populate({ path: "author", model: User });
+
+    const posts = await query.exec();
+    return { posts };
+  } catch (error: any) {
+    console.log(error);
+    return { error: error.message };
+  }
+}
