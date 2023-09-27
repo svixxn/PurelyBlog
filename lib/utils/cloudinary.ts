@@ -15,12 +15,12 @@ cloudinary.v2.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-const uploads = async ({
+export const uploadOne = async ({
   file,
   public_id,
   folder,
-  width = 500,
-  height = 500,
+  width = 800,
+  height = 800,
 }: Params) => {
   try {
     const result = await cloudinary.v2.uploader.upload(
@@ -44,4 +44,12 @@ const uploads = async ({
   }
 };
 
-export default uploads;
+export const deleteOne = async ({
+  folder,
+  public_id,
+}: {
+  folder: string;
+  public_id: string;
+}) => {
+  cloudinary.v2.uploader.destroy(`${folder}/${public_id}`);
+};

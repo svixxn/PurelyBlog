@@ -14,7 +14,7 @@ import { useState } from "react";
 import { PostUpsertValidation } from "@/lib/validations/post/post";
 import { savePost } from "@/lib/actions/posts.actions";
 import handleImageChange from "@/lib/utils/handleImageChange";
-import uploads from "@/lib/utils/cloudinary";
+import { uploadOne } from "@/lib/utils/cloudinary";
 
 type Props = {
   id?: string;
@@ -44,12 +44,7 @@ const PostForm = ({ id, image, title, text }: Props) => {
     try {
       values.image = image || null;
       if (preview) {
-        const result = await uploads({
-          file: preview,
-          folder: "purelyblog/posts",
-          public_id: userId,
-        });
-        if (typeof result === "string") values.image = result;
+        values.image = preview;
       }
       const res = await savePost({ ...values, author: userId, id });
       if (res?.error) {

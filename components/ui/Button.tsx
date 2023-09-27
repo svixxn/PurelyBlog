@@ -20,8 +20,8 @@ const MyButton = ({
   src = null,
   bgColor = "bg-cyan-700",
   textColor = "text-white",
-  width = "full",
-  height = "full",
+  width = 24,
+  height = 12,
   icon = null,
   isActive = true,
 }: Props) => {
@@ -39,7 +39,8 @@ const MyButton = ({
     <Link href={src}>
       <button
         onClick={onClickHandler}
-        className={`${textColor} flex flex-row items-center gap-2 py-1 px-2 justify-center rounded-lg customButtonBg ${bgColor} w-${width} h-${height} transition`}
+        disabled={!isActive}
+        className={`${textColor} ${bgColor} cursor-pointer disabled:opacity-25 disabled:cursor-not-allowed flex flex-row items-center gap-2 py-1 px-2 justify-center rounded-lg customButtonBg w-${width} h-${height} transition`}
       >
         {icon} {text}
       </button>

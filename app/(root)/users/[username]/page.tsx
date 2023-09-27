@@ -1,4 +1,5 @@
 import Button from "@/components/ui/Button";
+import UserPosts from "@/components/user/UserPosts";
 import UserTabs from "@/components/user/UserTabs";
 import { getUser } from "@/lib/actions/user.actions";
 import { getServerSession } from "next-auth";
@@ -7,13 +8,13 @@ import { toast } from "react-hot-toast";
 import { BiEditAlt, BiArchive } from "react-icons/bi";
 
 const page = async ({ params }: { params: { username: string } }) => {
-  const result = await getUser({ username: params.username });
+  const { user, error } = await getUser({ username: params.username });
   const session = await getServerSession();
 
-  const isSelf = result?.user?.email === session?.user?.email;
+  const isSelf = user?.email === session?.user?.email;
 
-  if (result?.error) {
-    toast.error(result.error);
+  if (error) {
+    toast.error(error);
     return;
   }
 
@@ -22,16 +23,16 @@ const page = async ({ params }: { params: { username: string } }) => {
       <div className="flex flex-row gap-28 px-10 mb-10">
         <div>
           <Image
-            src={result.user.image}
+            src={user.image}
             width={175}
             height={175}
-            alt={result.user.username}
+            alt={user.username}
             className="rounded-full"
           />
         </div>
         <div className="flex flex-col gap-6">
           <div className="flex flex-row gap-4 items-center">
-            <span className="text-xl font-bold">{result.user.username}</span>
+            <span className="text-xl font-bold">{user.username}</span>
             {isSelf ? (
               <>
                 <Button
@@ -67,11 +68,11 @@ const page = async ({ params }: { params: { username: string } }) => {
               <span className="font-bold">0</span> following
             </div>
           </div>
-          <div className="text-sm">{result.user.bio}</div>
+          <div className="text-sm">{user.bio}</div>
         </div>
       </div>
       <hr />
-      <UserTabs />
+      <UserPosts userId={user._id} />
     </div>
   );
 };

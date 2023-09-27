@@ -13,7 +13,7 @@ import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useState } from "react";
 import FilterChangedFields from "@/lib/utils/filterChangedFields";
-import uploads from "@/lib/utils/cloudinary";
+import { uploadOne } from "@/lib/utils/cloudinary";
 import MyModal from "../ui/Modal";
 
 type Props = {
@@ -56,7 +56,7 @@ const UserEditForm = ({ name, username, email, image, bio }: Props) => {
       values.image = image;
 
       if (preview) {
-        const result = await uploads({
+        const result = await uploadOne({
           file: preview,
           folder: "purelyblog/users",
           public_id: session?.user?.id as string,

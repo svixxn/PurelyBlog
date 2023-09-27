@@ -8,9 +8,10 @@ import { HiOutlineDotsCircleHorizontal } from "react-icons/hi";
 import MyModal from "../ui/Modal";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
-import MyButton from "../ui/Button";
+import Button from "../ui/Button";
 import { TextInput } from "flowbite-react";
 import { deletePost } from "@/lib/actions/posts.actions";
+import { deleteOne } from "@/lib/utils/cloudinary";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 
@@ -42,9 +43,9 @@ const PostCard = ({
   const isCurrentAuthor = session?.user?.username === authorUsername;
   const newCreatedAt = dateParse(createdAt);
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     try {
-      deletePost(id);
+      await deletePost(id);
       toast.success("Post deleted successfully");
       router.push("/");
     } catch (err: any) {
@@ -87,11 +88,11 @@ const PostCard = ({
         <div className="mt-auto flex flex-row gap-8">
           <div className="flex flex-row gap-1 items-center">
             <AiOutlineHeart size={25} className="text-red-500" />
-            <span className="text-gray-400">5</span>
+            <span className="text-gray-400">0</span>
           </div>
           <div className="flex flex-row gap-1 items-center">
             <FaRegCommentDots size={25} />
-            <span className="text-gray-400">3</span>
+            <span className="text-gray-400">0</span>
           </div>
         </div>
       </div>
@@ -113,7 +114,7 @@ const PostCard = ({
           setOpenModal={setIsOpen}
         >
           <div className="flex flex-col gap-4 w-full">
-            <MyButton text="Edit" src={`posts/${id}/edit`} />
+            <Button text="Edit" width="full" src={`/posts/${id}/edit`} />
             <p>
               To delete the post, enter{" "}
               <span className="font-bold">&apos;{title}&apos;</span>
@@ -125,7 +126,7 @@ const PostCard = ({
               type="text"
               onChange={(e) => setDeletingText(e.target.value)}
             />
-            <MyButton
+            <Button
               text="Delete"
               bgColor="bg-red-500"
               textColor="text-white"

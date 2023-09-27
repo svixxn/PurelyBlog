@@ -3,13 +3,12 @@ import { getPost } from "@/lib/actions/posts.actions";
 import toast from "react-hot-toast";
 
 const Page = async ({ params }: { params: { id: string } }) => {
-  const result = await getPost(params.id);
+  const { post, error } = await getPost(params.id);
 
-  if (result?.error) {
-    toast.error(result.error);
+  if (error) {
+    toast.error(error);
     return;
   }
-  const { post } = result;
 
   return (
     <PostForm
