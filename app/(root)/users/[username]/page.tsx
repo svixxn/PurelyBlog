@@ -1,6 +1,5 @@
 import Button from "@/components/ui/Button";
 import UserPosts from "@/components/user/UserPosts";
-import UserTabs from "@/components/user/UserTabs";
 import { getUser } from "@/lib/actions/user.actions";
 import { getServerSession } from "next-auth";
 import Image from "next/image";
