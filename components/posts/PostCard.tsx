@@ -55,7 +55,7 @@ const PostCard = ({
 
   return (
     <div className="flex flex-row gap-2 shadow-lg p-4">
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2 w-2/3">
         <div className="flex flex-row gap-2 items-center">
           <div>
             <Image
@@ -100,8 +100,8 @@ const PostCard = ({
         <div className="ml-auto">
           <Image
             src={image}
-            width={250}
-            height={250}
+            width={275}
+            height={275}
             alt={title}
             className="rounded"
           />
