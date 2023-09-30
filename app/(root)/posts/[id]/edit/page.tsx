@@ -1,13 +1,18 @@
 import PostForm from "@/components/posts/PostForm";
 import { getPost } from "@/lib/actions/posts.actions";
-import toast from "react-hot-toast";
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
 
 const Page = async ({ params }: { params: { id: string } }) => {
+  const session = await getServerSession();
   const { post, error } = await getPost(params.id);
 
   if (error) {
-    toast.error(error);
-    return;
+    redirect("/");
+  }
+
+  if (post.author.email !== session?.user?.email) {
+    redirect("/");
   }
 
   return (
