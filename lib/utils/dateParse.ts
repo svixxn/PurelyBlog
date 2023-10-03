@@ -3,7 +3,7 @@ const dateParse = (date: string) =>
     day: "numeric",
     month: "long",
     year: "numeric",
-    hour: "numeric",
-    minute: "numeric",
+    // hour: "numeric",
+    // minute: "numeric",
   });
 export default dateParse;
