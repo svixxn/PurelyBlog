@@ -6,6 +6,8 @@ import toast from "react-hot-toast";
 const Page = async ({ params }: { params: { username: string } }) => {
   const result = await getUser({ username: params.username });
 
+  console.log(result.user);
+
   if (result?.error) {
     toast.error(result.error);
     return;

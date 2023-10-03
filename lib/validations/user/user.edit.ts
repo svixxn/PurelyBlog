@@ -11,7 +11,7 @@ export const UserEditValidation = z.object({
   name: z
     .string()
     .min(3, "Name should be al least 3 characters long!")
-    .max(30, "Name should be less than 50 characters long!"),
+    .max(30, "Name should be less than 30 characters long!"),
   email: z
     .string()
     .email("You should provide a valid email")
@@ -20,7 +20,11 @@ export const UserEditValidation = z.object({
   username: z
     .string()
     .min(3, "Username should be al least 3 characters long!")
-    .max(20, "Username should be less than 20 characters long!"),
+    .max(20, "Username should be less than 20 characters long!")
+    .refine(
+      (name) => !name.includes(" "),
+      "Username should not contain spacebars!"
+    ),
   bio: z.string().max(160, "Bio should be less than 160 characters long!"),
   image: z
     .any()

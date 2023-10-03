@@ -12,6 +12,7 @@ import { AiOutlineLoading } from "react-icons/ai";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useState } from "react";
+import handleImageChange from "@/lib/utils/handleImageChange";
 import FilterChangedFields from "@/lib/utils/filterChangedFields";
 import { uploadOne } from "@/lib/utils/cloudinary";
 import MyModal from "../ui/Modal";
@@ -37,18 +38,6 @@ const UserEditForm = ({ name, username, email, image, bio }: Props) => {
   } = useForm<z.infer<typeof UserEditValidation>>({
     resolver: zodResolver(UserEditValidation),
   });
-
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-    if (files && files.length > 0) {
-      const file = files[0];
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPreview(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
 
   const onSubmit = async (values: z.infer<typeof UserEditValidation>) => {
     try {
@@ -85,7 +74,7 @@ const UserEditForm = ({ name, username, email, image, bio }: Props) => {
       });
 
       toast.success("User updated successfully");
-      router.push(`/users/${updatedFields.username || username}`);
+      router.replace(`/users/${updatedFields.username || username}`);
     } catch (err: any) {
       toast.error(err.message);
     }
@@ -106,7 +95,12 @@ const UserEditForm = ({ name, username, email, image, bio }: Props) => {
           />
           <FileInput
             id="image"
-            onChangeCapture={handleImageChange}
+            onChangeCapture={(e) =>
+              handleImageChange(
+                e as React.ChangeEvent<HTMLInputElement>,
+                setPreview
+              )
+            }
             {...register("image")}
           />
 

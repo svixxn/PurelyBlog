@@ -55,7 +55,7 @@ const PostCard = ({
 
   return (
     <div className="flex flex-row gap-2 shadow-lg p-4">
-      <div className="flex flex-col gap-2 w-2/3">
+      <div className={`flex flex-col gap-2 ${image && "w-2/3"}`}>
         <div className="flex flex-row gap-2 items-center">
           <div>
             <Image
@@ -69,7 +69,6 @@ const PostCard = ({
           <div className="flex flex-col">
             <div className="font-bold flex flex-row gap-1 items-center">
               <Link href={`/users/${authorUsername}`}>@{authorUsername}</Link>
-              <span className="text-gray-400 text-sm"> - {newCreatedAt}</span>
               <span> - {title}</span>
               {isCurrentAuthor && (
                 <HiOutlineDotsCircleHorizontal
@@ -83,7 +82,9 @@ const PostCard = ({
           </div>
         </div>
 
-        <p className="text-gray-700">{text}</p>
+        <p className={`text-gray-700 break-words`}>
+          {text.length > 250 ? text.slice(0, 250) + "..." : text}
+        </p>
 
         <div className="mt-auto flex flex-row gap-8">
           <div className="flex flex-row gap-1 items-center">
@@ -94,6 +95,7 @@ const PostCard = ({
             <FaRegCommentDots size={25} />
             <span className="text-gray-400">0</span>
           </div>
+          <div className="text-gray-400">{newCreatedAt}</div>
         </div>
       </div>
       {image && (
