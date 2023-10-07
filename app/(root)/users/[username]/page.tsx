@@ -1,6 +1,6 @@
 import Button from "@/components/ui/Button";
 import UserPosts from "@/components/user/UserPosts";
-import { getUser } from "@/lib/actions/user.actions";
+import { followUnFollowUser, getUser } from "@/lib/actions/user.actions";
 import { getServerSession } from "next-auth";
 import Image from "next/image";
 import { toast } from "react-hot-toast";
@@ -9,13 +9,30 @@ import { BiEditAlt, BiArchive } from "react-icons/bi";
 const page = async ({ params }: { params: { username: string } }) => {
   const { user, error } = await getUser({ username: params.username });
   const session = await getServerSession();
-
   const isSelf = user?.email === session?.user?.email;
+  const isAbleToFollow = !session?.user ? true : false;
+  const result = await getUser({ email: session?.user?.email as string });
+  const currentUser = result?.user;
+  const isFollowing = user?.followers?.includes(currentUser?._id as string);
 
   if (error) {
     toast.error(error);
     return;
   }
+
+  const handleFollowUnFollow = async (userId: string, followerId: string) => {
+    if (!isAbleToFollow) {
+      toast.error("You must be logged in to follow someone.");
+      return;
+    }
+
+    const { success, error } = await followUnFollowUser(userId, followerId);
+
+    if (error) {
+      toast.error(error);
+      return;
+    }
+  };
 
   return (
     <div>
@@ -49,11 +66,19 @@ const page = async ({ params }: { params: { username: string } }) => {
                 />
               </>
             ) : (
-              <Button
-                text="Follow"
-                bgColor="bg-cyan-700"
-                textColor="text-white"
-              />
+              //TODO: Fix this
+              // {isFollowing ? (
+              //   <Button
+              //   text="Unfollow"
+              //   bgColor="bg-cyan-700"
+              //   textColor="text-white"
+              // />
+              // ) : (
+              //   <Button
+              //   text="Follow"
+              //   bgColor="bg-cyan-700"
+              //   textColor="text-white"
+              // />)}   
             )}
           </div>
           <div className="flex flex-row gap-8 items-center">

@@ -157,3 +157,16 @@ export async function followUnFollowUser(userId: string, followerId: string) {
     return { error: err.message };
   }
 }
+
+export async function getFollowers(userId: string) {
+  try {
+    connectToDB();
+    const user = await User.findById(userId).populate("followers");
+
+    if (!user) return { error: "User not found" };
+
+    return { followers: user.followers };
+  } catch (err: any) {
+    return { error: err.message };
+  }
+}
