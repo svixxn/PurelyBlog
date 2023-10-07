@@ -133,3 +133,27 @@ export async function getUsers({
     return { error: err.message };
   }
 }
+
+export async function followUnFollowUser(userId: string, followerId: string) {
+  try {
+    connectToDB();
+    const currentUser = await User.findById(userId);
+    const follower = await User.findById(followerId);
+
+    if (!currentUser || !follower) return { error: "User not found" };
+
+    if (currentUser.followers.includes(followerId))
+      await currentUser.updateOne({ $pull: { followers: followerId } });
+    else await currentUser.updateOne({ $push: { followers: followerId } });
+
+    if (follower.following.includes(userId))
+      await follower.updateOne({ $pull: { following: userId } });
+    else await follower.updateOne({ $push: { following: userId } });
+
+    revalidatePath(`/users/${follower.username}`);
+
+    return { success: true };
+  } catch (err: any) {
+    return { error: err.message };
+  }
+}

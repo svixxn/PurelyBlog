@@ -42,6 +42,18 @@ const userSchema = new mongoose.Schema(
       default:
         "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg",
     },
+    followers: [
+      {
+        type: mongoose.Types.ObjectId,
+        ref: "User",
+      },
+    ],
+    following: [
+      {
+        type: mongoose.Types.ObjectId,
+        ref: "User",
+      },
+    ],
   },
   { timestamps: true }
 );
