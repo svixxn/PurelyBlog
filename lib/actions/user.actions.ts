@@ -137,18 +137,29 @@ export async function getUsers({
 export async function followUnFollowUser(userId: string, followerId: string) {
   try {
     connectToDB();
+
     const currentUser = await User.findById(userId);
     const follower = await User.findById(followerId);
 
-    if (!currentUser || !follower) return { error: "User not found" };
+    if (!currentUser || !follower) {
+      throw new Error("User not found");
+    }
 
-    if (currentUser.followers.includes(followerId))
-      await currentUser.updateOne({ $pull: { followers: followerId } });
-    else await currentUser.updateOne({ $push: { followers: followerId } });
+    const isFollowing = currentUser.following.includes(followerId);
 
-    if (follower.following.includes(userId))
-      await follower.updateOne({ $pull: { following: userId } });
-    else await follower.updateOne({ $push: { following: userId } });
+    await User.findOneAndUpdate(
+      { _id: userId },
+      isFollowing
+        ? { $pull: { following: followerId } }
+        : { $push: { following: followerId } }
+    );
+
+    await User.findOneAndUpdate(
+      { _id: followerId },
+      isFollowing
+        ? { $pull: { followers: userId } }
+        : { $push: { followers: userId } }
+    );
 
     revalidatePath(`/users/${follower.username}`);
 
