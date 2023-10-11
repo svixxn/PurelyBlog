@@ -181,3 +181,16 @@ export async function getFollowers(userId: string) {
     return { error: err.message };
   }
 }
+
+export async function getFollowing(userId: string) {
+  try {
+    connectToDB();
+    const user = await User.findById(userId).populate("following");
+
+    if (!user) return { error: "User not found" };
+
+    return { following: user.following };
+  } catch (err: any) {
+    return { error: err.message };
+  }
+}

@@ -107,18 +107,13 @@ export const getUserPosts = async (userId: string) => {
   }
 };
 
-
-export const getPostsByAuthor = async(userId: string) => {
+export const getUserPostsLength = async (userId: string) => {
   try {
     await connectToDB();
-    const query = Post.find({author: userId})
-      .sort({ createdAt: -1 })
-      .populate({ path: "author", model: User });
-
-    const posts = await query.exec();
-    return { posts };
+    const posts = await Post.find({ author: userId });
+    return { postsLength: posts.length };
   } catch (error: any) {
     console.log(error);
     return { error: error.message };
   }
-}
+};

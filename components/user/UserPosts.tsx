@@ -4,30 +4,40 @@ import toast from "react-hot-toast";
 import { BiMessageSquareEdit } from "react-icons/bi";
 import PostCard from "../posts/PostCard";
 
-const UserPosts = async ({ userId }: { userId: string }) => {
+type Props = {
+  userId: string;
+  isSelf: boolean;
+};
+
+const UserPosts = async ({ userId, isSelf }: Props) => {
   const { posts, error } = await getUserPosts(userId);
 
   if (error) {
-    toast.error(error);
-    return;
+    return <div>{error}</div>;
   }
 
   if (posts?.length == 0)
     return (
-      <div className="flex flex-col items-center justify-center gap-4 mt-10">
-        <span className="text-cyan-700">
-          <BiMessageSquareEdit size={150} className="opacity-25" />
-        </span>
-        <span className="text-3xl">Creating posts</span>
-        <span className="text-xl">
-          After creating the post it will be available on your profile page.
-        </span>
-        <Link href="/new-post">
-          <span className="text-xl text-cyan-700 underline">
-            Create your first post
-          </span>
-        </Link>
-      </div>
+      <>
+        {isSelf ? (
+          <div className="flex flex-col items-center justify-center gap-4 mt-10">
+            <span className="text-cyan-700">
+              <BiMessageSquareEdit size={150} className="opacity-25" />
+            </span>
+            <span className="text-3xl">Creating posts</span>
+            <span className="text-xl">
+              After creating the post it will be available on your profile page.
+            </span>
+            <Link href="/new-post">
+              <span className="text-xl text-cyan-700 underline">
+                Create your first post
+              </span>
+            </Link>
+          </div>
+        ) : (
+          <div className="mt-10 text-2xl">No posts yet.</div>
+        )}
+      </>
     );
 
   return (

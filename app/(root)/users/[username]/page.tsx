@@ -1,7 +1,8 @@
 import Button from "@/components/ui/Button";
 import FollowButton from "@/components/user/FollowButton";
 import UserPosts from "@/components/user/UserPosts";
-import { followUnFollowUser, getUser } from "@/lib/actions/user.actions";
+import { getUserPostsLength } from "@/lib/actions/posts.actions";
+import { getUser } from "@/lib/actions/user.actions";
 import { getServerSession } from "next-auth";
 import Image from "next/image";
 import { toast } from "react-hot-toast";
@@ -13,6 +14,8 @@ const page = async ({ params }: { params: { username: string } }) => {
   if (error) {
     return <div>{error}</div>;
   }
+
+  const { postsLength } = await getUserPostsLength(user._id as string);
 
   const session = await getServerSession();
   const isSelf = user?.email === session?.user?.email;
@@ -63,7 +66,7 @@ const page = async ({ params }: { params: { username: string } }) => {
           </div>
           <div className="flex flex-row gap-8 items-center">
             <div>
-              <span className="font-bold">0</span> posts
+              <span className="font-bold">{postsLength}</span> posts
             </div>
             <div>
               <span className="font-bold">{user.followers.length}</span>{" "}
@@ -78,7 +81,7 @@ const page = async ({ params }: { params: { username: string } }) => {
         </div>
       </div>
       <hr />
-      <UserPosts userId={user._id} />
+      <UserPosts userId={user._id} isSelf={isSelf} />
     </div>
   );
 };
